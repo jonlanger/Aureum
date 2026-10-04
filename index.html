@@ -52,8 +52,6 @@
   .hero { background: var(--teal-600); color: #fff; padding: 136px 0 0; overflow: hidden; }
   .hero__grid { position: relative; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: 48px; align-items: end; }
   .hero__copy { padding-bottom: clamp(64px, 9vw, 120px); }
-  .hero .pill { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px 6px 6px; border-radius: 99px; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.22); font-size: 13px; font-weight: 600; }
-  .hero .pill b { background: var(--gold-400); color: var(--indigo-900); padding: 2px 8px; border-radius: 99px; font-size: 11px; letter-spacing: .04em; }
   .hero h1 { color: #fff; margin: 24px 0 22px; font-size: clamp(3rem, 1.6rem + 6vw, 6.25rem); line-height: .98; }
   .hero h1 em { color: var(--mint-300); }
   .hero h1 .word { display: inline-block; opacity: 0; transform: translateY(.4em); animation: rise .9s var(--ease-out) forwards; animation-delay: calc(var(--i) * 110ms + 150ms); }
@@ -164,7 +162,11 @@
   .b-plan h3, .b-track h3 { color: var(--a-text-ink); }
   @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) :is(.b-plan, .b-track) h3 { color: var(--a-text); } }
   :root[data-theme="dark"] :is(.b-plan, .b-track) h3 { color: var(--a-text); }
-  .bento .illo { position: absolute; right: -6px; bottom: -6px; width: clamp(120px, 14vw, 170px); }
+  .bento .illo { position: absolute; right: 16px; bottom: 14px; width: clamp(120px, 14vw, 170px); }
+  .bento :is(.b-debt, .b-learn) { display: flex; flex-direction: column; }
+  .bento :is(.b-debt, .b-learn) .illo { position: static; margin: auto 0 0 auto; padding-top: 12px; }
+  /* navy line art disappears on indigo, so it sits on a light tile */
+  .bento .b-debt .illo { background: #dcdcf5; border-radius: var(--r-lg); padding: 10px; margin-top: auto; }
   .b-track .row { display: grid; grid-template-columns: 170px 1fr; gap: 20px; align-items: center; margin-top: 16px; }
   .b-track .txns .a-txn { padding: 8px 0; }
   .b-save .ring-row { display: flex; gap: 18px; align-items: center; margin-top: 18px; max-width: 60%; }
@@ -190,7 +192,7 @@
     .bento > * { grid-column: auto !important; }
     .b-track .row { grid-template-columns: 1fr; justify-items: center; }
     .b-track .txns { width: 100%; }
-    .bento .illo { position: relative; right: auto; bottom: auto; width: 116px !important; margin: 8px -8px -20px auto; }
+    .bento .illo { position: relative; right: auto; bottom: auto; width: 116px !important; margin: 8px 0 0 auto; }
     .b-save .ring-row, .b-debt .bar { max-width: none; }
   }
 
@@ -249,7 +251,11 @@
   @media (max-width: 900px) { .sim { grid-template-columns: 1fr; } }
 
   /* ---------- PERSONAS ---------- */
-  .people { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 8px var(--gutter) 28px; margin: 0 calc(var(--gutter) * -1); scrollbar-width: thin; }
+  .people { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: var(--gutter); padding: 8px var(--gutter) 28px; margin: 0 calc(var(--gutter) * -1); scrollbar-width: thin;
+    --fade: clamp(24px, 6vw, 96px); --fl: 0px; --fr: var(--fade);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 var(--fl), #000 calc(100% - var(--fr)), transparent); mask-image: linear-gradient(90deg, transparent, #000 var(--fl), #000 calc(100% - var(--fr)), transparent); }
+  .people.is-scrolled { --fl: var(--fade); }
+  .people.is-end { --fr: 0px; }
   .person { scroll-snap-align: start; flex: 0 0 min(300px, 82vw); border-radius: var(--r-xl); background: var(--a-surface); border: 1px solid var(--a-border); overflow: hidden; transition: transform var(--dur-3) var(--ease-out), box-shadow var(--dur-3); }
   .person:hover { transform: translateY(-6px); box-shadow: var(--e-3); }
   .person .art { height: 170px; display: grid; place-items: center; }
@@ -262,7 +268,7 @@
   .person .body { padding: 20px; }
   .person .who { display: flex; gap: 12px; align-items: center; }
   .person .who b { display: block; font-size: 15px; }
-  .person .who span { font-size: 13px; color: var(--a-text-3); }
+  .person .who div span { font-size: 13px; color: var(--a-text-3); }
   .person .goal { margin-top: 18px; display: flex; gap: 14px; align-items: center; }
   .person .goal div:last-child b { display: block; font-size: 13px; color: var(--a-text-2); font-weight: 600; }
   .person .goal div:last-child span { font-size: 18px; font-weight: 800; }
@@ -337,7 +343,6 @@
   <section class="hero">
     <div class="a-container hero__grid">
       <div class="hero__copy">
-        <span class="pill"><b>NEW</b>Your AI finance coach, now on the web</span>
         <h1 class="a-display" aria-label="Money, mentored."><span class="word" style="--i:0">Money,</span> <em class="word" style="--i:1">mentored.</em></h1>
         <p class="a-lead">Aureum connects your accounts, builds a plan around your goals, and gives you a heads-up <i>before</i> small problems become big ones. It's guidance that fits your life, not generic advice.</p>
         <div class="hero__ctas">
@@ -460,7 +465,7 @@
           <span class="a-eyebrow"><span data-icon="card"></span>Debt</span>
           <h3>A payoff plan you'll actually finish.</h3>
           <div class="bar"><div class="a-progress a-progress--lg"><span style="--value:68%"></span></div><small><span>$18,400 paid</span><span>Free by Mar ’28</span></small></div>
-          <div class="illo" data-illo="payoff" aria-label="Debt payoff staircase" style="width:120px"></div>
+          <div class="illo" data-illo="payoff" aria-label="Debt payoff staircase" style="width:128px"></div>
         </article>
         <article class="b-learn" data-reveal style="--delay:80ms">
           <span class="a-eyebrow"><span data-icon="grad"></span>Learn</span>
@@ -498,7 +503,7 @@
           <div class="a-card tile"><div class="a-stat"><span class="a-stat__label">Savings rate</span><span class="a-figure a-figure--md" id="kRate">0%</span><div class="a-progress" style="margin-top:6px"><span id="kRateBar" style="--value:0%"></span></div></div></div>
           <div class="a-card wide"><div class="a-card__head"><div><p class="a-card__title">Cash flow</p><p class="a-card__sub">Money in vs. money out, with net savings</p></div></div><div id="dashCash"></div></div>
           <div class="a-card side"><div class="a-card__head"><div><p class="a-card__title">Net worth</p><p class="a-card__sub">All accounts</p></div></div><div id="dashNw"></div></div>
-          <div class="a-card full"><div class="a-card__head"><div><p class="a-card__title">Spending rhythm</p><p class="a-card__sub">Daily spending, last 18 weeks. Weekends run warm.</p></div></div><div id="dashHeat" style="overflow-x:auto"></div></div>
+          <div class="a-card full"><div class="a-card__head"><div><p class="a-card__title">Spending rhythm</p><p class="a-card__sub">Daily spending, last 18 weeks. Weekends run warm.</p></div></div><div id="dashHeat"></div></div>
         </div>
       </div>
     </div>
@@ -697,7 +702,7 @@
     V.line($("#dashNw"), { label: "Net worth", labels: months, series: [{ name: "Net worth", values: sl(D.netWorth) }], area: true, height: 280 });
   }
   renderDash(12);
-  V.heatmap($("#dashHeat"), { label: "Daily spending, 18 weeks", values: D.daily, start: new Date(2026, 5, 1) });
+  V.heatmap($("#dashHeat"), { label: "Daily spending, 18 weeks", values: D.daily, start: new Date(2026, 5, 1), fill: true });
   $$(".dash__filters [data-range]").forEach((b) => b.addEventListener("click", () => {
     $$(".dash__filters [data-range]").forEach((x) => x.setAttribute("aria-pressed", x === b));
     dash.classList.add("is-loading");
@@ -746,6 +751,9 @@
     </article>`).join("");
   D.personas.forEach((p, i) => V.ring($("#pr" + i), { value: p.saved / p.target, size: 64, color: p.color, label: p.goal }));
   $$("#people [data-reveal]").forEach((el) => rio.observe(el));
+  const people = $("#people");
+  const edges = () => { people.classList.toggle("is-scrolled", people.scrollLeft > 4); people.classList.toggle("is-end", people.scrollLeft + people.clientWidth >= people.scrollWidth - 4); };
+  people.addEventListener("scroll", edges, { passive: true }); addEventListener("resize", edges); edges();
 })();
 </script>
 </body>

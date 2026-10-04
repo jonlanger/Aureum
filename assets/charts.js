@@ -547,7 +547,8 @@
 
   /* ======================================================================
      HEATMAP — daily spending calendar (sequential teal)
-     cfg: { values:[daily], start: Date, format, weeks }
+     cfg: { values:[daily], start: Date, format, weeks, fill }
+     fill: cells stretch to the container width; height grows more slowly.
      ====================================================================== */
   function heatmap(el, cfg) {
     const tt = tooltip(el);
@@ -557,10 +558,12 @@
       const W = el.clientWidth || 600;
       const weeks = Math.ceil(vals.length / 7);
       const padL = 28, padT = 18;
-      const gap = 3;
-      const cell = clamp(Math.floor((W - padL - gap * weeks) / weeks), 8, cfg.maxCell || 34);
+      const gap = cfg.fill && (W - padL) / weeks > 48 ? 5 : 3;
+      const fit = cfg.fill ? (W - padL + gap) / weeks : Math.floor((W - padL) / weeks);
+      const cw = cfg.fill ? Math.max(8, fit - gap) : clamp(fit - gap, 8, cfg.maxCell || 34);
+      const cell = cfg.fill ? Math.min(cw, Math.max(cfg.maxCell || 34, Math.round(cw * .45)), 44) : cw;
       const H = padT + 7 * (cell + gap) + 30;
-      const svg = svgRoot(el, Math.min(W, padL + weeks * (cell + gap)), H, cfg.label);
+      const svg = svgRoot(el, Math.min(W, padL + weeks * (cw + gap) - gap), H, cfg.label);
       const mx = Math.max(...vals);
       const bins = 6;
       const bin = (v) => (v === 0 ? 0 : 1 + Math.min(bins - 1, Math.floor((v / mx) * bins)));
@@ -572,11 +575,11 @@
         const date = new Date(start); date.setDate(start.getDate() + i);
         if (dy === 0 && date.getMonth() !== lastMonth) {
           lastMonth = date.getMonth();
-          s("text", { x: padL + wk * (cell + gap), y: 11, class: "viz-tick" }, svg).textContent = date.toLocaleString("en-US", { month: "short" });
+          s("text", { x: padL + wk * (cw + gap), y: 11, class: "viz-tick" }, svg).textContent = date.toLocaleString("en-US", { month: "short" });
         }
         const b = bin(v);
-        const r = s("rect", { x: padL + wk * (cell + gap), y: padT + dy * (cell + gap), width: cell, height: cell, rx: 3, class: "viz-cell", tabindex: 0, style: `fill:${b ? `var(--seq-${b + 1})` : "var(--seq-1)"};--i:${wk}`, "aria-label": `${date.toDateString()}: ${f(v)}` }, svg);
-        const show = () => tt.show(date.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" }), [{ label: "Spent", value: f(v), color: `var(--seq-${b + 1})`, shape: "box" }], +r.getAttribute("x") + cell / 2, +r.getAttribute("y"));
+        const r = s("rect", { x: padL + wk * (cw + gap), y: padT + dy * (cell + gap), width: cw, height: cell, rx: cfg.fill ? 5 : 3, class: "viz-cell", tabindex: 0, style: `fill:${b ? `var(--seq-${b + 1})` : "var(--seq-1)"};--i:${wk}`, "aria-label": `${date.toDateString()}: ${f(v)}` }, svg);
+        const show = () => tt.show(date.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" }), [{ label: "Spent", value: f(v), color: `var(--seq-${b + 1})`, shape: "box" }], +r.getAttribute("x") + cw / 2, +r.getAttribute("y"));
         r.addEventListener("pointerenter", show); r.addEventListener("focus", show);
         r.addEventListener("pointerleave", tt.hide); r.addEventListener("blur", tt.hide);
       });

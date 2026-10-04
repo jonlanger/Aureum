@@ -88,7 +88,7 @@
     const k = scale;
     const eye = (x) => mood === "sleep"
       ? `<path d="M${x - 7 * k} ${cy}Q${x} ${cy + 6 * k} ${x + 7 * k} ${cy}" fill="none" stroke="${C.line}" stroke-width="${SW * k}" stroke-linecap="round"/>`
-      : `<g class="ill-blink" style="transform-origin:${x}px ${cy}px"><ellipse cx="${x}" cy="${cy}" rx="${7 * k}" ry="${9 * k}" fill="${C.line}"/><circle cx="${x + 2.5 * k}" cy="${cy - 3.5 * k}" r="${2.6 * k}" fill="#fff"/></g>`;
+      : `<g class="ill-blink"><ellipse cx="${x}" cy="${cy}" rx="${7 * k}" ry="${9 * k}" fill="${C.line}"/><circle cx="${x + 2.5 * k}" cy="${cy - 3.5 * k}" r="${2.6 * k}" fill="#fff"/></g>`;
     const mouth = mood === "sleep"
       ? `<ellipse cx="${cx}" cy="${cy + 17 * k}" rx="${3.5 * k}" ry="${3 * k}" fill="${C.line}"/>`
       : mood === "wow"
@@ -144,7 +144,7 @@
     if (h === "long" || h === "locs" || h === "bob") front = `<path d="M66 86C64 56 82 46 100 46 120 46 138 58 134 88 120 80 112 68 108 60 96 72 80 80 66 86Z" fill="${hair}" ${st()}/>`;
     if (h === "curly") front = curls([[76, 62], [92, 54], [110, 54], [126, 64]], 12, hair);
     if (h === "bun") front = `<path d="M66 82C64 56 82 46 100 46 120 46 138 56 134 82 124 66 112 60 100 60 88 60 76 66 66 82Z" fill="${hair}" ${st()}/>`;
-    const eyes = [100 - 13, 100 + 13].map((x) => `<g class="ill-blink" style="transform-origin:${x}px ${eyeY}px"><ellipse cx="${x}" cy="${eyeY}" rx="3.8" ry="4.8" fill="${C.line}"/></g>`).join("");
+    const eyes = [100 - 13, 100 + 13].map((x) => `<g class="ill-blink"><ellipse cx="${x}" cy="${eyeY}" rx="3.8" ry="4.8" fill="${C.line}"/></g>`).join("");
     return `<g>
       ${back}
       <path d="M38 200C38 158 64 140 100 140 136 140 162 158 162 200Z" fill="${shirt}" ${st()}/>
@@ -189,14 +189,14 @@
 
     piggy: () => `<svg viewBox="0 0 200 200" fill="none">
       <ellipse cx="100" cy="182" rx="62" ry="7" fill="${C.line}" opacity=".14"/>
-      <g class="ill-coin-drop">${coin(100, 30, 15)}</g>
+      <g class="ill-coin-drop">${coin(100, 36, 14)}</g>
       <g class="ill-bob-soft">
         <path d="M60 160V176H76V164M120 164V176H136V160" fill="${C.teal}" stroke="${C.line}" stroke-width="${SW}" stroke-linejoin="round"/>
         <path d="M44 118C44 88 70 70 102 70 128 70 146 82 154 98L170 102C176 104 178 110 178 118 178 126 176 132 170 134L154 138C146 156 126 166 100 166 66 166 44 146 44 118Z" fill="${C.body}" stroke="${C.line}" stroke-width="${SW}" stroke-linejoin="round"/>
-        <path d="M120 78L132 56 142 86" fill="${C.mint}" stroke="${C.line}" stroke-width="${SW}" stroke-linejoin="round"/>
+        <path d="M117 79C115 66 121 56 133 52 139 62 140 74 135 85" fill="${C.mint}" stroke="${C.line}" stroke-width="${SW}" stroke-linejoin="round"/>
         <ellipse cx="166" cy="118" rx="12" ry="15" fill="${C.mint}" stroke="${C.line}" stroke-width="${SW}"/>
         ${dot(162, 113, 2.8)}${dot(162, 123, 2.8)}
-        <g class="ill-blink" style="transform-origin:138px 106px"><ellipse cx="138" cy="106" rx="6" ry="7.5" fill="${C.line}"/><circle cx="140" cy="103" r="2.2" fill="#fff"/></g>
+        <g class="ill-blink"><ellipse cx="138" cy="106" rx="6" ry="7.5" fill="${C.line}"/><circle cx="140" cy="103" r="2.2" fill="#fff"/></g>
         <ellipse cx="146" cy="128" rx="7" ry="4.5" fill="${C.blush}" opacity=".85"/>
         <rect x="84" y="74" width="34" height="8" rx="4" fill="${C.line}"/>
         <path d="M62 100C66 90 74 84 84 81" stroke="#fff" stroke-width="7" stroke-linecap="round" opacity=".55"/>
@@ -229,7 +229,7 @@
         <rect x="82" y="154" width="36" height="12" rx="4" fill="${C.sky}" stroke="${C.line}" stroke-width="${SW}"/>
         <path d="M92 166V172H108V166" fill="${C.line}" stroke="${C.line}" stroke-width="${SW}" stroke-linejoin="round"/>
       </g>
-      <g class="ill-rays" stroke="${C.line}" stroke-width="${SW}" stroke-linecap="round"><path d="M100 14V6M48 34L42 28M152 34L158 28M26 84H18M174 84H182"/></g>
+      <g class="ill-rays" style="transform-origin:100px 84px" stroke="${C.line}" stroke-width="${SW}" stroke-linecap="round"><path d="M100 14V6M48 34L42 28M152 34L158 28M26 84H18M174 84H182"/></g>
       ${sparkle(160, 150, 8, C.white, "ill-twinkle", .3)}${sparkle(40, 150, 6, C.gold, "ill-twinkle", 1)}</svg>`,
 
     shield: () => `<svg viewBox="0 0 200 200" fill="none">
@@ -291,18 +291,21 @@
       ${sparkle(26, 40, 8, C.white, "ill-twinkle", 0)}${sparkle(180, 110, 6, C.gold, "ill-twinkle", .8)}</svg>`,
 
     payoff: () => `<svg viewBox="0 0 200 200" fill="none">
-      <path d="M20 56H62V92H100V128H140V164H182" stroke="${C.line}" stroke-width="${SW}" stroke-linejoin="round" stroke-linecap="round"/>
-      <path d="M20 56H62V92H100V128H140V164H182V180H20Z" fill="${C.mintLite}" opacity=".7"/>
+      <ellipse cx="100" cy="184" rx="78" ry="6" fill="${C.line}" opacity=".14"/>
+      <path d="M22 66H62V100H100V134H140V168H178V178H22Z" fill="${C.mintLite}" stroke="${C.line}" stroke-width="${SW}" stroke-linejoin="round"/>
       <g class="ill-bob-soft">
-        <rect x="26" y="20" width="56" height="34" rx="6" fill="${C.indigo}" stroke="${C.line}" stroke-width="${SW}" transform="rotate(-8 54 37)"/>
-        <path d="M30 32L84 24" stroke="${C.line}" stroke-width="5" transform="rotate(-8 54 37)"/>
+        <g transform="rotate(-8 46 46)">
+          <rect x="20" y="30" width="54" height="34" rx="6" fill="${C.indigo}" stroke="${C.line}" stroke-width="${SW}"/>
+          <path d="M20 41H74" stroke="${C.line}" stroke-width="6"/>
+          <path d="M28 54H44" stroke="#fff" stroke-width="3.5" stroke-linecap="round" opacity=".7"/>
+        </g>
       </g>
-      <g class="ill-flag" style="transform-origin:162px 164px">
-        <path d="M162 164V112" stroke="${C.line}" stroke-width="${SW}" stroke-linecap="round"/>
-        <path d="M162 114H192L184 126 192 138H162Z" fill="#5fb83a" stroke="${C.line}" stroke-width="${SW}" stroke-linejoin="round"/>
+      <g class="ill-flag" style="transform-origin:158px 168px">
+        <path d="M158 168V116" stroke="${C.line}" stroke-width="${SW}" stroke-linecap="round"/>
+        <path d="M158 118H188L180 130 188 142H158Z" fill="#5fb83a" stroke="${C.line}" stroke-width="${SW}" stroke-linejoin="round"/>
       </g>
-      ${coin(80, 74, 10, "ill-float-a")}${coin(120, 110, 10, "ill-float-b")}
-      ${sparkle(120, 40, 8, C.gold, "ill-twinkle", .3)}${sparkle(180, 70, 6, C.white, "ill-twinkle", 1)}${plus(36, 150, 5)}</svg>`,
+      ${coin(82, 84, 10, "ill-float-a")}${coin(120, 118, 10, "ill-float-b")}
+      ${sparkle(120, 44, 8, C.gold, "ill-twinkle", .3)}${sparkle(178, 76, 6, C.white, "ill-twinkle", 1)}${plus(184, 30, 5)}</svg>`,
 
     connect: () => `<svg viewBox="0 0 200 200" fill="none">
       <rect x="62" y="26" width="76" height="148" rx="16" fill="#fff" stroke="${C.line}" stroke-width="${SW}"/>
@@ -324,7 +327,7 @@
         <circle cx="42" cy="88" r="10" fill="${SKIN[p.skin]}" ${st()}/><circle cx="158" cy="88" r="10" fill="${SKIN[p.skin]}" ${st()}/>
         ${at(10, 22, .9, bust(p))}
       </g>
-      ${[[30, 30, C.gold, 0], [70, 14, C.teal, .5], [128, 18, C.blush, .9], [170, 34, C.sky, .3], [100, 6, C.mint, 1.2], [182, 70, C.gold, 1.6], [18, 66, C.indigo, 1.9]].map(([x, y, f, d]) => `<rect class="ill-confetti" style="--d:${d}s" x="${x}" y="${y}" width="9" height="13" rx="2" fill="${f}" ${st(2)}/>`).join("")}
+      ${[[30, 30, C.gold, 0], [70, 22, C.teal, .5], [128, 24, C.blush, .9], [170, 34, C.sky, .3], [100, 16, C.mint, 1.2], [182, 70, C.gold, 1.6], [18, 66, C.indigo, 1.9]].map(([x, y, f, d]) => `<rect class="ill-confetti" style="--d:${d}s" x="${x}" y="${y}" width="9" height="13" rx="2" fill="${f}" ${st(2)}/>`).join("")}
     </svg>`; },
 
     wheelchair: (o = {}) => { const p = { ...PEOPLE[o.who ?? 0] }; return `<svg viewBox="0 0 200 200" fill="none">
@@ -388,8 +391,8 @@
         <path d="M88 128L92 134 96 128M104 128L108 134 112 128M96 142L100 148 104 142" stroke="${C.line}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity=".55"/>
         <path d="M48 116C34 128 38 150 54 156M152 116C166 128 162 150 146 156" fill="${C.indigo}" ${st()}/>
         <circle cx="80" cy="96" r="19" fill="#fff" ${st()}/><circle cx="120" cy="96" r="19" fill="#fff" ${st()}/>
-        <g class="ill-blink" style="transform-origin:80px 96px"><circle cx="82" cy="97" r="8" fill="${C.line}"/><circle cx="85" cy="94" r="2.6" fill="#fff"/></g>
-        <g class="ill-blink" style="transform-origin:120px 96px"><circle cx="122" cy="97" r="8" fill="${C.line}"/><circle cx="125" cy="94" r="2.6" fill="#fff"/></g>
+        <g class="ill-blink"><circle cx="82" cy="97" r="8" fill="${C.line}"/><circle cx="85" cy="94" r="2.6" fill="#fff"/></g>
+        <g class="ill-blink"><circle cx="122" cy="97" r="8" fill="${C.line}"/><circle cx="125" cy="94" r="2.6" fill="#fff"/></g>
         <path d="M94 112L100 122 106 112Z" fill="${C.gold}" ${st(3)}/>
       </g>
       <path d="M84 170V176M92 170V176M108 170V176M116 170V176" stroke="${C.gold}" stroke-width="5" stroke-linecap="round"/>
@@ -406,9 +409,9 @@
 
     /* ---------- small states ---------- */
     sleeping: () => `<svg viewBox="0 0 200 200" fill="none">${mascotBody({ mood: "sleep", anim: "ill-breathe" })}
-      <text class="ill-zzz" style="--d:0s" x="150" y="62" font-family="Lora, Georgia, serif" font-style="italic" font-weight="600" font-size="22" fill="${C.line}">z</text>
-      <text class="ill-zzz" style="--d:1.1s" x="164" y="44" font-family="Lora, Georgia, serif" font-style="italic" font-weight="600" font-size="17" fill="${C.line}">z</text>
-      <text class="ill-zzz" style="--d:2.2s" x="176" y="28" font-family="Lora, Georgia, serif" font-style="italic" font-weight="600" font-size="13" fill="${C.line}">z</text>
+      <text class="ill-zzz" style="--d:0s" x="148" y="70" font-family="Lora, Georgia, serif" font-style="italic" font-weight="600" font-size="22" fill="${C.line}">z</text>
+      <text class="ill-zzz" style="--d:1.1s" x="162" y="54" font-family="Lora, Georgia, serif" font-style="italic" font-weight="600" font-size="17" fill="${C.line}">z</text>
+      <text class="ill-zzz" style="--d:2.2s" x="174" y="40" font-family="Lora, Georgia, serif" font-style="italic" font-weight="600" font-size="13" fill="${C.line}">z</text>
     </svg>`,
 
     watering: () => `<svg viewBox="0 0 200 200" fill="none">
@@ -418,7 +421,7 @@
         <path d="M138 112L162 98" ${st(6)}/><path d="M138 112L162 98" stroke="${C.sky}" stroke-width="2"/>
         <path d="M102 112C92 112 90 128 102 130" fill="none" ${st()}/>
       </g>
-      ${[0, .25, .5].map((d, i) => `<circle class="ill-drip" style="--d:${d}s" cx="${164 + i * 3}" cy="${110 + i * 4}" r="3" fill="${C.sky}" ${st(1.5)}/>`).join("")}
+      ${[0, .25, .5].map((d, i) => `<circle class="ill-drip" style="--d:${d}s" cx="${166 - i * 2}" cy="${118 + i * 4}" r="3" fill="${C.sky}" ${st(1.5)}/>`).join("")}
       <path d="M144 158H184L178 186H150Z" fill="${C.blush}" ${st()}/>
       <g class="ill-grow-soft"><path d="M164 158V140" ${st()}/><path d="M164 148C156 148 150 142 150 134 158 134 164 140 164 148Z" fill="${C.teal}" ${st(3)}/><path d="M164 144C171 144 176 138 176 131 169 131 164 137 164 144Z" fill="${C.mint}" ${st(3)}/></g>
     </svg>`,
@@ -433,7 +436,7 @@
   const css = `
     .ill-bob{animation:a-bob 3.6s var(--ease-in-out,ease-in-out) infinite;animation-delay:var(--d,0s);transform-box:fill-box;transform-origin:center bottom}
     .ill-bob-soft{animation:a-float 4.5s ease-in-out infinite}
-    .ill-blink{animation:a-blink 5s infinite;transform-box:fill-box}
+    .ill-blink{animation:a-blink 5s infinite;transform-box:fill-box;transform-origin:center}
     .ill-twinkle{animation:a-twinkle 2.4s ease-in-out infinite;animation-delay:var(--d,0s)}
     .ill-wave{animation:ill-wave 1.6s ease-in-out infinite;transform-box:view-box}
     .ill-coin-drop{animation:ill-drop 2.8s cubic-bezier(.55,0,.75,.2) infinite}
@@ -451,9 +454,9 @@
     .ill-dash{animation:ill-march 1.2s linear infinite}
     .ill-rays{animation:a-twinkle 2.4s ease-in-out infinite}
     @keyframes ill-wave{0%,100%{transform:rotate(0)}50%{transform:rotate(-14deg)}}
-    @keyframes ill-drop{0%{transform:translateY(-20px);opacity:0}15%{opacity:1}60%{transform:translateY(44px);opacity:1}72%,100%{transform:translateY(50px);opacity:0}}
+    @keyframes ill-drop{0%{transform:translateY(-6px);opacity:0}15%{opacity:1}60%{transform:translateY(34px);opacity:1}72%,100%{transform:translateY(40px);opacity:0}}
     @keyframes ill-spin{to{transform:rotate(360deg)}}
-    @keyframes ill-thunk{0%{transform:translate(40px,-40px);opacity:0}18%{transform:translate(0,0);opacity:1}22%{transform:translate(-2px,2px)}26%,85%{transform:none;opacity:1}100%{opacity:0}}
+    @keyframes ill-thunk{0%{transform:translate(24px,-24px);opacity:0}18%{transform:translate(0,0);opacity:1}22%{transform:translate(-2px,2px)}26%,85%{transform:none;opacity:1}100%{opacity:0}}
     @keyframes ill-flutter{0%,100%{transform:skewY(0)}50%{transform:skewY(-4deg)}}
     @keyframes ill-grow{0%{transform:scale(0)}25%,85%{transform:scale(1)}100%{transform:scale(1)}}
     @keyframes ill-draw{0%{stroke-dashoffset:160}40%,100%{stroke-dashoffset:0}}
@@ -480,7 +483,7 @@
     @keyframes ill-confetti{0%{transform:translateY(-12px) rotate(0);opacity:0}15%{opacity:1}100%{transform:translateY(36px) rotate(170deg);opacity:0}}
     @keyframes ill-cheer{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
     @keyframes ill-sway{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
-    @keyframes ill-pour{0%,100%{transform:rotate(0)}40%,70%{transform:rotate(-18deg)}}
+    @keyframes ill-pour{0%,100%{transform:rotate(0)}40%,70%{transform:rotate(18deg)}}
     @keyframes ill-drip{0%,38%{transform:translateY(0);opacity:0}46%{opacity:1}80%{transform:translateY(40px);opacity:0}100%{opacity:0}}
     @keyframes ill-grow-soft{0%,100%{transform:scale(.6)}45%,90%{transform:scale(1)}}
     /* Off-screen art pauses; data-still art never moves. Keeps the page calm. */
