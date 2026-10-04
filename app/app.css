@@ -146,9 +146,9 @@ main.view.enter { animation: viewIn .38s var(--ease-out) both; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .insight__title { color: var(--a-text); } }
 :root[data-theme="dark"] .insight__title { color: var(--a-text); }
 .insight__body { grid-column: 2; margin: 0; font-size: 15px; color: var(--a-text-2); line-height: 1.5; }
-.insight__actions { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); gap: 6px; margin-top: 12px; }
-.insight__actions .a-btn { min-height: 48px; }
-.insight__actions .primary { grid-column: 1 / -1; min-height: 56px; font-size: 16px; }
+.insight__actions { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+.insight__actions .a-btn { flex: 1 1 0; min-width: 0; min-height: 48px; }
+.insight__actions .primary { flex-basis: 100%; min-height: 56px; font-size: 16px; }
 .insight__why { grid-column: 1 / -1; margin-top: 8px; padding: 14px; border-radius: 16px; background: var(--a-surface-sunk); font-size: 14px; color: var(--a-text-2); }
 .insight__why small { display: block; margin-top: 6px; color: var(--a-text-3); }
 .insight__x { position: absolute; top: 8px; right: 8px; width: 40px; height: 40px; border-radius: 50%; border: 0; background: transparent; color: var(--a-text-3); cursor: pointer; display: grid; place-items: center; }
