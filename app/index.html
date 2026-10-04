@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#008080">
+<title>Aureum</title>
+<meta name="description" content="Aureum: your AI money coach. A step-by-step plan, a safe-to-spend number, and nudges that help.">
+<link rel="stylesheet" href="../assets/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="app.css">
+<style>body.is-onboarding .shell { display: none; } body:not(.is-onboarding) #ob { display: none; }</style>
+</head>
+<body>
+<div id="ob"></div>
+<div class="shell">
+  <a class="visually-hidden" href="#view">Skip to content</a>
+  <aside class="side" aria-label="Main">
+    <a class="a-logo" href="#/home"><span data-logo></span>Aureum</a>
+    <nav>
+      <a href="#/home"><span data-icon="bank"></span>Home</a>
+      <a href="#/budget"><span data-icon="pie"></span>Budget</a>
+      <a href="#/plan"><span data-icon="target"></span>Money Map</a>
+      <a href="#/goals"><span data-icon="piggy"></span>Goals &amp; debt</a>
+      <a href="#/coach"><span data-icon="sparkle"></span>Coach</a>
+    </nav>
+    <button class="a-btn btn-xl btn-block side__cta" data-act="add-txn"><span data-icon="plus"></span>Add transaction</button>
+    <div class="side__foot">
+      <a class="health-mini" href="#/coach" id="sideHealth"></a>
+      <div class="menu-list">
+        <a href="#/settings"><span data-icon="menu"></span>Settings</a>
+        <a href="../index.html"><span data-icon="home"></span>Aureum homepage</a>
+        <button data-act="signout"><span data-icon="arrowRight"></span>Sign out</button>
+      </div>
+    </div>
+  </aside>
+  <a class="rail-logo" href="#/home" aria-label="Aureum home"><span data-logo></span></a>
+  <header class="topbar">
+    <a class="a-logo" href="#/home"><span data-logo></span>Aureum</a>
+    <span class="topbar__title" id="topTitle" hidden></span>
+    <div class="topbar__right">
+      <a class="icon-btn" href="#/coach" aria-label="Coach notifications"><span data-icon="bell"></span><span class="dot" id="bellDot" hidden></span></a>
+      <button class="avatar-btn" data-act="account" aria-label="Account menu" aria-haspopup="dialog">?</button>
+    </div>
+  </header>
+  <main class="view" id="view" tabindex="-1"></main>
+  <nav class="tabs" aria-label="Main">
+    <a href="#/home"><span data-icon="bank"></span>Home</a>
+    <a href="#/budget"><span data-icon="pie"></span>Budget</a>
+    <a href="#/plan"><span data-icon="target"></span>Plan</a>
+    <a href="#/goals"><span data-icon="piggy"></span>Goals</a>
+    <a href="#/coach"><span data-icon="sparkle"></span>Coach</a>
+  </nav>
+  <button class="fab" data-act="add-txn" aria-label="Add transaction"><span data-icon="plus"></span>Add</button>
+</div>
+<script src="../assets/art.js"></script>
+<script src="../assets/charts.js"></script>
+<script type="module" src="js/app.js"></script>
+</body>
+</html>

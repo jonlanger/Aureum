@@ -1,0 +1,265 @@
+/* ==========================================================================
+   Aureum Finance — Design Tokens
+   Brand: friendly · sophisticated · bold
+   Primitive scales → semantic roles → component use. Components should only
+   reference semantic roles (the --a-* names below the primitives).
+   ========================================================================== */
+
+@import url("https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap");
+
+:root {
+  /* ---------- Primitive: Teal (brand primary, #008080) ---------- */
+  --teal-50:  #eef8f7;
+  --teal-100: #d3eeeb;
+  --teal-200: #a6dcd8;
+  --teal-300: #6fc4be;
+  --teal-400: #34a8a1;
+  --teal-500: #00918b;
+  --teal-600: #008080; /* brand */
+  --teal-700: #006a6b;
+  --teal-800: #075556;
+  --teal-900: #0b3f41;
+  --teal-950: #082a2c;
+
+  /* ---------- Primitive: Indigo (brand ink, from the original UI) ---------- */
+  --indigo-50:  #f0f0fb;
+  --indigo-100: #dcdcf5;
+  --indigo-200: #b7b7ea;
+  --indigo-300: #8a8ad9;
+  --indigo-400: #5d5dc6;
+  --indigo-500: #3d3db8;
+  --indigo-600: #2c2c9a;
+  --indigo-700: #1f1f80;
+  --indigo-800: #1b1b6f; /* brand ink */
+  --indigo-900: #121250;
+  --indigo-950: #0b0b33;
+
+  /* ---------- Primitive: Mint / Sky (illustration atmosphere) ---------- */
+  --mint-100: #e3f7f5;
+  --mint-200: #bdebe8;
+  --mint-300: #8fdcd7;
+  --mint-400: #5fcac4;
+  --sky-100:  #e6f3fc;
+  --sky-200:  #c4e3f7;
+  --sky-300:  #9ccff2;
+
+  /* ---------- Primitive: Accent ---------- */
+  --gold-300: #ffd27a;
+  --gold-400: #f6b93b;
+  --gold-500: #e19c12;
+  --coral-300: #f7a785;
+  --coral-500: #e8703a;
+
+  /* ---------- Primitive: Neutral (cool, very slightly teal) ---------- */
+  --gray-0:   #ffffff;
+  --gray-25:  #fcfcfa;
+  --gray-50:  #f5f7f6;
+  --gray-100: #ebefee;
+  --gray-200: #dce2e1;
+  --gray-300: #c3cbca;
+  --gray-400: #96a09f;
+  --gray-500: #6d7877;
+  --gray-600: #515b5b;
+  --gray-700: #394242;
+  --gray-800: #232b2c;
+  --gray-850: #19222a;
+  --gray-900: #131c24;
+  --gray-950: #0b1218;
+
+  /* ======================================================================
+     Semantic roles — LIGHT (default)
+     ====================================================================== */
+  color-scheme: light;
+
+  /* Surfaces */
+  --a-bg:            #f5f7f6;   /* page plane */
+  --a-surface:       #ffffff;   /* cards */
+  --a-surface-2:     #f9fbfa;   /* nested / chart surface */
+  --a-surface-sunk:  #eef2f1;   /* inputs, tracks */
+  --a-surface-brand: var(--teal-600);
+  --a-surface-ink:   var(--indigo-800);
+  --a-surface-mint:  var(--mint-200);
+
+  /* Text */
+  --a-text:          #121a33;   /* primary ink (indigo-tinted near-black) */
+  --a-text-2:        #4b5468;   /* secondary */
+  --a-text-3:        #7a8294;   /* muted / axis */
+  --a-text-brand:    var(--teal-700);
+  --a-text-ink:      var(--indigo-800);
+  --a-text-on-brand: #ffffff;
+  --a-text-on-brand-2: rgba(255,255,255,.78);
+
+  /* Lines */
+  --a-border:        rgba(18, 26, 51, .10);
+  --a-border-strong: rgba(18, 26, 51, .18);
+  --a-grid:          #e4e9e8;
+  --a-axis:          #c3cbca;
+
+  /* Interactive */
+  --a-primary:          var(--indigo-800);
+  --a-primary-hover:    var(--indigo-700);
+  --a-primary-press:    var(--indigo-900);
+  --a-on-primary:       #ffffff;
+  --a-accent:           var(--teal-600);
+  --a-accent-hover:     var(--teal-700);
+  --a-accent-soft:      var(--teal-50);
+  --a-focus:            #3d3db8;
+
+  /* Status (fixed; always paired with icon + label) */
+  --a-good:        #3f9a1f;
+  --a-good-soft:   #e7f4df;
+  --a-good-text:   #2d6e15;
+  --a-warn:        #f2a33a;
+  --a-warn-soft:   #fdf0dc;
+  --a-warn-text:   #8a5300;
+  --a-bad:         #d8432f;
+  --a-bad-soft:    #fbe5e1;
+  --a-bad-text:    #a52b1c;
+  --a-info:        #3d3db8;
+  --a-info-soft:   #ececfa;
+
+  /* Data viz — categorical (validated: adjacent CVD ΔE ≥ 11.8, normal ΔE ≥ 25.6;
+     first 3 validate all-pairs for scatter/bubble) */
+  --viz-1: #00918b;  /* teal */
+  --viz-2: #3d3db8;  /* indigo */
+  --viz-3: #e8703a;  /* coral */
+  --viz-4: #3a8ede;  /* sky */
+  --viz-5: #d99a00;  /* gold — <3:1, always direct-label */
+  --viz-6: #c4508f;  /* magenta */
+  --viz-7: #4f9a2e;  /* leaf */
+  --viz-8: #7a4fc0;  /* plum */
+  --viz-muted: #c8d0cf; /* de-emphasis / "Other" */
+
+  /* Data viz — sequential (teal, light→dark) */
+  --seq-1: #e2f3f1; --seq-2: #b8e2de; --seq-3: #82cbc5; --seq-4: #45ada6;
+  --seq-5: #108d87; --seq-6: #036e6d; --seq-7: #0a4d4f;
+
+  /* Data viz — diverging (teal ⇄ coral, gray midpoint) */
+  --div-pos-3: #036e6d; --div-pos-2: #34a8a1; --div-pos-1: #a6dcd8;
+  --div-mid:   #eceeed;
+  --div-neg-1: #f7c4ad; --div-neg-2: #ec8a5c; --div-neg-3: #c2521f;
+
+  /* Data viz — chrome */
+  --viz-surface: #fcfcfa;
+  --viz-area-opacity: .12;
+
+  /* ---------- Typography ---------- */
+  --font-display: "Lora", "Iowan Old Style", Georgia, serif;
+  --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* Fluid type scale (min @360px → max @1280px) */
+  --fs-display: clamp(2.75rem, 1.6rem + 5vw, 5.5rem);
+  --fs-h1:      clamp(2.25rem, 1.6rem + 2.8vw, 3.75rem);
+  --fs-h2:      clamp(1.75rem, 1.35rem + 1.7vw, 2.75rem);
+  --fs-h3:      clamp(1.3rem, 1.15rem + .6vw, 1.625rem);
+  --fs-h4:      1.125rem;
+  --fs-lg:      1.125rem;
+  --fs-md:      1rem;
+  --fs-sm:      .875rem;
+  --fs-xs:      .75rem;
+  --fs-figure-xl: clamp(2.5rem, 1.8rem + 3vw, 4rem);
+  --fs-figure-lg: clamp(1.75rem, 1.4rem + 1.4vw, 2.5rem);
+  --fs-figure-md: 1.5rem;
+
+  --lh-tight: 1.08;
+  --lh-snug:  1.25;
+  --lh-body:  1.6;
+
+  --tracking-tight: -0.02em;
+  --tracking-caps:  0.08em;
+
+  /* ---------- Space (4px base) ---------- */
+  --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px; --sp-4: 16px; --sp-5: 20px;
+  --sp-6: 24px; --sp-8: 32px; --sp-10: 40px; --sp-12: 48px; --sp-16: 64px;
+  --sp-20: 80px; --sp-24: 96px; --sp-32: 128px;
+  --gutter: clamp(16px, 4vw, 40px);
+  --container: 1200px;
+
+  /* ---------- Radius ---------- */
+  --r-xs: 4px; --r-sm: 8px; --r-md: 12px; --r-lg: 20px; --r-xl: 28px; --r-pill: 999px;
+
+  /* ---------- Elevation (soft, indigo-tinted) ---------- */
+  --e-1: 0 1px 2px rgba(18,26,51,.06), 0 1px 1px rgba(18,26,51,.04);
+  --e-2: 0 2px 4px rgba(18,26,51,.05), 0 8px 20px -6px rgba(18,26,51,.10);
+  --e-3: 0 4px 8px rgba(18,26,51,.05), 0 20px 40px -12px rgba(18,26,51,.18);
+  --e-4: 0 8px 16px rgba(18,26,51,.06), 0 32px 64px -16px rgba(18,26,51,.26);
+  /* "Lifted" — the hard offset shadow from the original brand board */
+  --e-lift: 6px 6px 0 rgba(11, 63, 65, .22);
+
+  /* ---------- Motion ---------- */
+  --ease-out:    cubic-bezier(.22, 1, .36, 1);     /* default enter */
+  --ease-in-out: cubic-bezier(.65, 0, .35, 1);     /* morphs, toggles */
+  --ease-spring: cubic-bezier(.34, 1.56, .64, 1);  /* playful pops (illustration, chips) */
+  --dur-1: 120ms;  /* hover, press */
+  --dur-2: 220ms;  /* small UI */
+  --dur-3: 420ms;  /* cards, panels */
+  --dur-4: 900ms;  /* chart draw-in */
+  --dur-5: 1600ms; /* hero / illustration loops */
+}
+
+/* ======================================================================
+   Semantic roles — DARK
+   Declared under the OS preference (guarded so an explicit light stamp wins)
+   and again under the explicit data-theme toggle.
+   ====================================================================== */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --a-bg: #0b1218; --a-surface: #131c24; --a-surface-2: #17212a; --a-surface-sunk: #0f171e;
+    --a-surface-brand: #0b4a4b; --a-surface-ink: #10103a; --a-surface-mint: #12302f;
+    --a-text: #eef3f2; --a-text-2: #b3bfc0; --a-text-3: #7f8c8e;
+    --a-text-brand: #5fcac4; --a-text-ink: #b7b7ea;
+    --a-border: rgba(255,255,255,.09); --a-border-strong: rgba(255,255,255,.16);
+    --a-grid: #212c35; --a-axis: #34414b;
+    --a-primary: #8fdcd7; --a-primary-hover: #a6e5e1; --a-primary-press: #6fc4be; --a-on-primary: #082a2c;
+    --a-accent: #34a8a1; --a-accent-hover: #5fcac4; --a-accent-soft: #0e2b2d; --a-focus: #8a8ad9;
+    --a-good: #5fb83a; --a-good-soft: #15291a; --a-good-text: #8fd46d;
+    --a-warn: #f2a33a; --a-warn-soft: #2e2312; --a-warn-text: #f6c171;
+    --a-bad: #ec6a55; --a-bad-soft: #321a17; --a-bad-text: #f59a8a;
+    --a-info: #8a8ad9; --a-info-soft: #1b1b3d;
+    --viz-1: #1aa8a0; --viz-2: #7c7cf0; --viz-3: #e06a35; --viz-4: #3d8fdf;
+    --viz-5: #b5850c; --viz-6: #d0589a; --viz-7: #5eab38; --viz-8: #9a72e0; --viz-muted: #3a4750;
+    --seq-1: #12302f; --seq-2: #0f4846; --seq-3: #0d625f; --seq-4: #13817b;
+    --seq-5: #2aa59d; --seq-6: #5fcac4; --seq-7: #a6e9e4;
+    --div-pos-3: #6fd6cf; --div-pos-2: #2aa59d; --div-pos-1: #145a58; --div-mid: #26313a;
+    --div-neg-1: #5c2e1b; --div-neg-2: #c25b2b; --div-neg-3: #f29a6e;
+    --viz-surface: #131c24; --viz-area-opacity: .18;
+    --e-1: 0 1px 2px rgba(0,0,0,.4);
+    --e-2: 0 8px 20px -6px rgba(0,0,0,.5);
+    --e-3: 0 20px 40px -12px rgba(0,0,0,.6);
+    --e-4: 0 32px 64px -16px rgba(0,0,0,.7);
+    --e-lift: 6px 6px 0 rgba(0,0,0,.45);
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --a-bg: #0b1218; --a-surface: #131c24; --a-surface-2: #17212a; --a-surface-sunk: #0f171e;
+  --a-surface-brand: #0b4a4b; --a-surface-ink: #10103a; --a-surface-mint: #12302f;
+  --a-text: #eef3f2; --a-text-2: #b3bfc0; --a-text-3: #7f8c8e;
+  --a-text-brand: #5fcac4; --a-text-ink: #b7b7ea;
+  --a-border: rgba(255,255,255,.09); --a-border-strong: rgba(255,255,255,.16);
+  --a-grid: #212c35; --a-axis: #34414b;
+  --a-primary: #8fdcd7; --a-primary-hover: #a6e5e1; --a-primary-press: #6fc4be; --a-on-primary: #082a2c;
+  --a-accent: #34a8a1; --a-accent-hover: #5fcac4; --a-accent-soft: #0e2b2d; --a-focus: #8a8ad9;
+  --a-good: #5fb83a; --a-good-soft: #15291a; --a-good-text: #8fd46d;
+  --a-warn: #f2a33a; --a-warn-soft: #2e2312; --a-warn-text: #f6c171;
+  --a-bad: #ec6a55; --a-bad-soft: #321a17; --a-bad-text: #f59a8a;
+  --a-info: #8a8ad9; --a-info-soft: #1b1b3d;
+  --viz-1: #1aa8a0; --viz-2: #7c7cf0; --viz-3: #e06a35; --viz-4: #3d8fdf;
+  --viz-5: #b5850c; --viz-6: #d0589a; --viz-7: #5eab38; --viz-8: #9a72e0; --viz-muted: #3a4750;
+  --seq-1: #12302f; --seq-2: #0f4846; --seq-3: #0d625f; --seq-4: #13817b;
+  --seq-5: #2aa59d; --seq-6: #5fcac4; --seq-7: #a6e9e4;
+  --div-pos-3: #6fd6cf; --div-pos-2: #2aa59d; --div-pos-1: #145a58; --div-mid: #26313a;
+  --div-neg-1: #5c2e1b; --div-neg-2: #c25b2b; --div-neg-3: #f29a6e;
+  --viz-surface: #131c24; --viz-area-opacity: .18;
+  --e-1: 0 1px 2px rgba(0,0,0,.4);
+  --e-2: 0 8px 20px -6px rgba(0,0,0,.5);
+  --e-3: 0 20px 40px -12px rgba(0,0,0,.6);
+  --e-4: 0 32px 64px -16px rgba(0,0,0,.7);
+  --e-lift: 6px 6px 0 rgba(0,0,0,.45);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --dur-1: 0ms; --dur-2: 0ms; --dur-3: 0ms; --dur-4: 0ms; --dur-5: 0ms; }
+}

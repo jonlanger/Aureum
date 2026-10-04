@@ -1,0 +1,713 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aureum Design System</title>
+<meta name="description" content="Tokens, components, illustration and data visualization for Aureum Finance.">
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/components.css">
+<style>
+  body { background: var(--a-bg); }
+  .ds { display: grid; grid-template-columns: 248px minmax(0, 1fr); min-height: 100vh; }
+  .ds-nav { position: sticky; top: 0; height: 100vh; overflow: auto; padding: 28px 20px; border-right: 1px solid var(--a-border); background: var(--a-surface); }
+  .ds-nav a.a-logo { display: inline-flex; font-size: 1.2rem; margin-bottom: 4px; }
+  .ds-nav a.a-logo:hover { background: none; }
+  .ds-nav .ver { font-size: 12px; color: var(--a-text-3); margin: 0 0 24px 46px; }
+  .ds-nav h6 { margin: 20px 0 6px; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--a-text-3); }
+  .ds-nav a { display: block; padding: 6px 10px; margin: 0 -10px; border-radius: 8px; font-size: 14px; font-weight: 500; color: var(--a-text-2); text-decoration: none; }
+  .ds-nav a:hover { background: var(--a-surface-sunk); color: var(--a-text); }
+  .ds-nav a.is-active { background: var(--a-accent-soft); color: var(--a-text-brand); font-weight: 700; }
+  .ds-nav .theme { margin-top: 28px; display: flex; gap: 8px; }
+  .ds-main { min-width: 0; padding: 0 0 120px; }
+  .ds-hero { position: relative; overflow: hidden; background: var(--teal-600); color: #fff; padding: 72px var(--gutter) 64px; }
+  .ds-hero .a-display { color: #fff; font-size: clamp(2.5rem, 1.6rem + 4vw, 4.75rem); max-width: 12ch; }
+  .ds-hero .a-lead { color: rgba(255,255,255,.82); max-width: 56ch; margin-top: 20px; }
+  .ds-hero [data-illo] { position: absolute; right: max(var(--gutter), 4vw); bottom: -8px; width: clamp(140px, 20vw, 260px); }
+  .ds-hero .principles { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 32px; position: relative; }
+  .ds-hero .principles span { padding: 8px 14px; border-radius: 99px; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.22); font-size: 13px; font-weight: 600; }
+  .ds-sec { padding: 72px var(--gutter) 0; max-width: 1180px; }
+  .ds-sec > header { margin-bottom: 28px; max-width: 70ch; }
+  .ds-sec > header .a-h2 { margin: 8px 0 12px; }
+  .ds-sub { margin: 40px 0 14px; font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--a-text-3); }
+  .grid { display: grid; gap: 16px; }
+  .g2 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); }
+  .g3 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); }
+  .g4 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); }
+  .demo { background: var(--a-surface); border: 1px solid var(--a-border); border-radius: var(--r-lg); padding: 24px; }
+  .demo--pad0 { padding: 0; overflow: hidden; }
+  .demo h4 { margin: 0 0 4px; font-size: 15px; font-weight: 700; }
+  .demo .use { margin: 0 0 18px; font-size: 13px; color: var(--a-text-2); }
+  .demo-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+  .demo-head > div:first-child { flex: 1; min-width: 0; }
+  .demo-head > :last-child { flex: none; }
+  .note { font-size: 12.5px; color: var(--a-text-3); margin-top: 12px; }
+
+  /* swatches */
+  .ramp { display: grid; grid-template-columns: repeat(11, minmax(0, 1fr)); border-radius: var(--r-md); overflow: hidden; }
+  .ramp div { aspect-ratio: 1 / 1.25; padding: 8px; display: flex; flex-direction: column; justify-content: flex-end; font-family: var(--font-mono); font-size: 10px; line-height: 1.3; min-width: 0; }
+  .ramp div b { font-family: var(--font-sans); font-size: 11px; }
+  .ramp-name { display: flex; justify-content: space-between; align-items: baseline; margin: 24px 0 8px; font-weight: 700; font-size: 14px; }
+  .ramp-name span { font-weight: 500; color: var(--a-text-3); font-size: 12px; }
+  @media (max-width: 720px) { .ramp { grid-template-columns: repeat(6, 1fr); } .ramp div { aspect-ratio: auto; height: 64px; } }
+  .sw { display: grid; grid-template-columns: 44px 1fr; gap: 12px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--a-border); }
+  .sw:last-child { border-bottom: 0; }
+  .sw i { width: 44px; height: 44px; border-radius: 12px; border: 1px solid var(--a-border); }
+  .sw b { display: block; font-size: 13px; }
+  .sw code { font-family: var(--font-mono); font-size: 11.5px; color: var(--a-text-3); }
+  .cat { display: grid; grid-template-columns: repeat(8, 1fr); gap: 8px; }
+  .cat div { border-radius: 12px; height: 84px; padding: 10px; display: flex; flex-direction: column; justify-content: space-between; color: #fff; font-size: 11px; font-weight: 700; }
+  .cat div code { font-family: var(--font-mono); font-weight: 400; font-size: 10.5px; opacity: .9; }
+  @media (max-width: 720px) { .cat { grid-template-columns: repeat(4, 1fr); } }
+  .seqbar { display: flex; gap: 2px; border-radius: 10px; overflow: hidden; height: 44px; }
+  .seqbar div { flex: 1; }
+  .checks { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; font-size: 13.5px; }
+  .checks li { display: grid; grid-template-columns: 22px 1fr; gap: 8px; color: var(--a-text-2); }
+  .checks li svg { color: var(--a-good); width: 18px; height: 18px; margin-top: 2px; }
+  .checks li.x svg { color: var(--a-bad); }
+
+  /* type */
+  .type-row { display: grid; grid-template-columns: 140px 1fr; gap: 24px; align-items: baseline; padding: 18px 0; border-bottom: 1px solid var(--a-border); }
+  .type-row:last-child { border-bottom: 0; }
+  .type-row .meta { font-family: var(--font-mono); font-size: 11.5px; color: var(--a-text-3); line-height: 1.5; }
+  @media (max-width: 640px) { .type-row { grid-template-columns: 1fr; gap: 6px; } }
+  .specimen { font-family: var(--font-display); font-size: clamp(4rem, 10vw, 8rem); line-height: .9; color: var(--a-text-ink); letter-spacing: -.03em; }
+  .specimen--sans { font-family: var(--font-sans); font-weight: 800; }
+
+  /* tokens visual */
+  .space-row { display: grid; grid-template-columns: 64px 1fr 60px; gap: 12px; align-items: center; font-family: var(--font-mono); font-size: 12px; color: var(--a-text-3); padding: 4px 0; }
+  .space-row i { display: block; height: 14px; background: var(--teal-300); border-radius: 3px; }
+  .radius-box { height: 88px; background: var(--a-accent-soft); border: 2px solid var(--a-accent); display: grid; place-items: center; font-family: var(--font-mono); font-size: 12px; color: var(--a-text-brand); }
+  .elev-box { height: 110px; background: var(--a-surface); border-radius: var(--r-lg); display: grid; place-items: center; font-family: var(--font-mono); font-size: 12px; color: var(--a-text-3); }
+
+  /* motion */
+  .ease-row { display: grid; grid-template-columns: 150px 1fr; align-items: center; gap: 16px; padding: 10px 0; border-bottom: 1px solid var(--a-border); }
+  .ease-row:last-child { border-bottom: 0; }
+  .ease-row code { font-family: var(--font-mono); font-size: 12px; color: var(--a-text-2); }
+  .ease-track { position: relative; height: 32px; background: var(--a-surface-sunk); border-radius: 99px; }
+  .ease-ball { position: absolute; top: 4px; left: 4px; width: 24px; height: 24px; border-radius: 50%; background: var(--a-accent); transition: left 900ms var(--e); }
+  .ease-track.go .ease-ball { left: calc(100% - 28px); }
+
+  /* icons / illos */
+  .icon-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 8px; }
+  .icon-cell { display: grid; justify-items: center; gap: 8px; padding: 16px 6px 12px; border-radius: 12px; background: var(--a-surface); border: 1px solid var(--a-border); color: var(--a-text-ink); font-size: 11px; font-family: var(--font-mono); }
+  .icon-cell span:last-child { color: var(--a-text-3); }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .icon-cell { color: var(--a-text); } }
+  :root[data-theme="dark"] .icon-cell { color: var(--a-text); }
+  .illo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
+  .illo-cell { border-radius: var(--r-lg); padding: 18px; display: grid; gap: 10px; }
+  .illo-cell:nth-child(4n+1) { background: var(--mint-200); }
+  .illo-cell:nth-child(4n+2) { background: var(--sky-200); }
+  .illo-cell:nth-child(4n+3) { background: #d6efe9; }
+  .illo-cell:nth-child(4n) { background: var(--teal-300); }
+  .illo-cell [data-illo] { aspect-ratio: 1; }
+  .illo-cell b { font-size: 13px; color: var(--indigo-800); }
+  .illo-cell small { font-size: 12px; color: var(--teal-900); margin-top: -6px; }
+  .people-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 140px), 1fr)); gap: 12px; max-width: 760px; }
+  .people-grid figure { margin: 0; border-radius: var(--r-lg); background: var(--a-surface); border: 1px solid var(--a-border); padding: 12px 12px 10px; display: grid; gap: 6px; }
+  .people-grid figure > div { aspect-ratio: 1; border-radius: 50%; overflow: hidden; background: var(--mint-100); }
+  .people-grid figure:nth-child(3n+2) > div { background: var(--sky-100); }
+  .people-grid figure:nth-child(3n) > div { background: #fff3d9; }
+  .people-grid figcaption { font-size: 11.5px; color: var(--a-text-3); line-height: 1.35; text-align: center; }
+  .tiers { display: grid; gap: 14px; }
+  .tiers > div { display: grid; grid-template-columns: 96px 1fr; grid-template-rows: auto auto; column-gap: 12px; align-items: center; }
+  .tiers > div > span { grid-row: 1 / 3; justify-self: center; display: block; background: var(--mint-200); border-radius: 18px; padding: 6px; }
+  .tiers b { font-size: 14px; } .tiers small { font-size: 12.5px; color: var(--a-text-3); }
+  .t-hero { width: 96px; } .t-spot { width: 64px; } .t-inline { width: 40px; border-radius: 12px !important; }
+  .phone-demo { width: 170px; margin: 6px auto 0; border-radius: 26px; border: 2px solid var(--a-border-strong); padding: 12px; display: grid; gap: 8px; background: var(--a-bg); }
+  .pd-bar { height: 8px; width: 40%; border-radius: 4px; background: var(--a-surface-sunk); }
+  .pd-hero { border-radius: 14px; background: var(--a-surface-mint); padding: 10px; display: grid; grid-template-columns: 56px 1fr; gap: 6px 8px; align-items: center; min-height: 76px; }
+  .pd-hero span { width: 56px; grid-row: 1 / 3; }
+  .pd-hero i { display: block; height: 7px; border-radius: 4px; background: rgba(11,63,65,.25); }
+  .pd-card { height: 34px; border-radius: 10px; background: var(--a-surface); border: 1px solid var(--a-border); position: relative; }
+  .pd-btn { height: 22px; border-radius: 99px; background: var(--a-primary); }
+  .phone-demo.is-bad { border-color: var(--a-bad); }
+  .phone-demo.is-bad .pd-hero { grid-template-columns: 1fr 1fr; }
+  .phone-demo.is-bad .pd-hero span { width: 56px; grid-row: auto; }
+  .pd-chart { height: 62px; background: linear-gradient(to top right, transparent 48%, var(--viz-1) 49%, var(--viz-1) 52%, transparent 53%), var(--a-surface); }
+  .pd-chart span { position: absolute; right: 4px; bottom: 2px; width: 50px; }
+
+  /* component demos */
+  .stack-v { display: grid; gap: 14px; }
+  .phone { width: 100%; max-width: 360px; border-radius: 28px; border: 1px solid var(--a-border); overflow: hidden; background: var(--a-bg); box-shadow: var(--e-3); }
+  .chart-tools { display: flex; gap: 8px; }
+  .dd-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 16px; }
+  .dd { border-radius: var(--r-lg); padding: 20px; border: 1px solid var(--a-border); background: var(--a-surface); }
+  .dd h5 { margin: 0 0 10px; font-size: 13px; display: flex; gap: 8px; align-items: center; }
+  .dd h5 svg { width: 18px; height: 18px; }
+  .dd--do h5 { color: var(--a-good-text); } .dd--dont h5 { color: var(--a-bad-text); }
+
+  /* mobile nav */
+  @media (max-width: 960px) {
+    .ds { grid-template-columns: 1fr; }
+    .ds-nav { position: sticky; top: 0; z-index: 20; height: auto; padding: 12px var(--gutter); display: flex; gap: 6px; align-items: center; overflow-x: auto; border-right: 0; border-bottom: 1px solid var(--a-border); scrollbar-width: none; }
+    .ds-nav .a-logo span.word, .ds-nav .ver, .ds-nav h6 { display: none; }
+    .ds-nav .a-logo { margin: 0 6px 0 0; }
+    .ds-nav a { white-space: nowrap; margin: 0; }
+    .ds-nav .theme { margin: 0 0 0 auto; }
+    .ds-hero [data-illo] { opacity: .35; }
+  }
+</style>
+</head>
+<body>
+<div class="ds">
+  <nav class="ds-nav" aria-label="Design system sections">
+    <a class="a-logo" href="index.html" style="margin:0 0 4px;padding:0;background:none"><span data-logo style="color:var(--teal-600)"></span><span class="word">Aureum</span></a>
+    <p class="ver">Design System · v2.0</p>
+    <h6>Foundations</h6>
+    <a href="#brand">Brand &amp; logo</a>
+    <a href="#color">Color</a>
+    <a href="#data-color">Data color</a>
+    <a href="#type">Typography</a>
+    <a href="#tokens">Space, shape, depth</a>
+    <a href="#motion">Motion</a>
+    <h6>Assets</h6>
+    <a href="#icons">Icons</a>
+    <a href="#illustration">Illustration</a>
+    <h6>Components</h6>
+    <a href="#components">UI components</a>
+    <a href="#coach">Coach patterns</a>
+    <a href="#dataviz">Data visualization</a>
+    <a href="#rules">Chart rules</a>
+    <div class="theme">
+      <button class="a-btn a-btn--secondary a-btn--sm" id="themeBtn" type="button" aria-label="Toggle dark mode"><span data-icon="moon" data-size="16"></span><span class="lbl">Dark</span></button>
+      <a class="a-btn a-btn--sm" href="index.html" style="margin:0;color:var(--a-on-primary)">Homepage</a>
+    </div>
+  </nav>
+
+  <main class="ds-main" id="top">
+    <!-- HERO -->
+    <section class="ds-hero">
+      <div style="position:relative;max-width:1100px">
+        <p class="a-eyebrow" style="color:var(--mint-300)">Aureum Finance · Design System</p>
+        <h1 class="a-display" style="margin-top:12px">Money, made <em style="color:var(--mint-300)">legible.</em></h1>
+        <p class="a-lead">The foundations, components, illustration and data-visualization system behind Aureum — an AI coach that helps people see what's coming and act with confidence. Built to feel friendly without losing the credibility money demands.</p>
+        <div class="principles"><span>Friendly</span><span>Sophisticated</span><span>Bold</span><span>Supportive, never prescriptive</span><span>Celebrate progress</span></div>
+      </div>
+      <div data-illo="wizard" aria-label="Sprout, the Aureum coach, wearing a wizard hat"></div>
+    </section>
+
+    <!-- BRAND -->
+    <section class="ds-sec" id="brand">
+      <header>
+        <p class="a-eyebrow">01 · Brand</p>
+        <h2 class="a-h2">The twin-tree mark</h2>
+        <p class="a-lead">Two trees of different heights — one established, one growing — read as a lowercase “Aa”. It carries the brand idea: steady growth, side by side with a guide.</p>
+      </header>
+      <div class="grid g3">
+        <div class="demo" style="background:var(--teal-600);display:grid;place-items:center;min-height:200px"><span class="a-logo a-logo--light" style="font-size:2rem"><span data-logo style="width:48px;height:48px;color:#fff"></span>Aureum</span></div>
+        <div class="demo" style="background:#fff;display:grid;place-items:center;min-height:200px"><span class="a-logo" style="font-size:2rem;color:var(--indigo-800)"><span data-logo style="width:48px;height:48px;color:var(--teal-600)"></span>Aureum</span></div>
+        <div class="demo" style="background:var(--indigo-800);display:grid;place-items:center;min-height:200px"><span class="a-logo a-logo--light" style="font-size:2rem"><span data-logo style="width:48px;height:48px;color:var(--mint-300)"></span>Aureum</span></div>
+      </div>
+      <div class="grid g4" style="margin-top:16px">
+        <div class="demo" style="display:flex;gap:16px;align-items:flex-end;justify-content:center">
+          <span data-logo data-tile style="width:72px"></span><span data-logo data-tile style="width:48px"></span><span data-logo data-tile style="width:32px"></span><span data-logo data-tile style="width:20px"></span>
+        </div>
+        <div class="demo"><h4>Clear space</h4><p class="use" style="margin:0">Keep one mark-stem width (≈ ⅙ of mark height) clear on every side. Minimum size 20px on screen.</p></div>
+        <div class="demo"><h4>Voice</h4><p class="use" style="margin:0">Warm, plain, specific. “You're $150 over on dining — want to rebalance?” not “Budget variance detected.”</p></div>
+        <div class="demo"><h4>Wordmark</h4><p class="use" style="margin:0">Lora Bold, −1% tracking. Always teal mark + ink word on light; white or mint on dark.</p></div>
+      </div>
+    </section>
+
+    <!-- COLOR -->
+    <section class="ds-sec" id="color">
+      <header>
+        <p class="a-eyebrow">02 · Color</p>
+        <h2 class="a-h2">Teal leads. Indigo grounds.</h2>
+        <p class="a-lead">Teal <code class="a-mono">#008080</code> is the brand surface — bold hero fields, the mark, the accent. Indigo <code class="a-mono">#1B1B6F</code> is the ink: headlines, primary actions, figures. Mint and sky give illustrations their air. Components reference semantic roles only, so dark mode is a token swap.</p>
+      </header>
+      <div id="ramps"></div>
+      <h3 class="ds-sub">Semantic roles <span style="text-transform:none;letter-spacing:0;font-weight:500">(values reflect the current theme)</span></h3>
+      <div class="grid g3" id="roles"></div>
+    </section>
+
+    <!-- DATA COLOR -->
+    <section class="ds-sec" id="data-color">
+      <header>
+        <p class="a-eyebrow">03 · Data color</p>
+        <h2 class="a-h2">A chart palette that's validated, not eyeballed</h2>
+        <p class="a-lead">Eight categorical hues drawn from the brand, assigned in a fixed order. The order is what makes them safe for color-blind readers: every pair of neighbours stays distinct under deuteranopia, protanopia and tritanopia. Light and dark are separately tuned sets, both validated against their own surface.</p>
+      </header>
+      <h3 class="ds-sub">Categorical · fixed order</h3>
+      <div class="cat" id="catSw"></div>
+      <div class="grid g2" style="margin-top:16px">
+        <div class="demo">
+          <h4>Validation results</h4>
+          <ul class="checks" style="margin-top:12px">
+            <li><span data-icon="check"></span><span><b>Light:</b> worst adjacent CVD ΔE 11.8 (target ≥ 8), normal-vision ΔE 25.6 (floor 15), all in lightness band and above chroma floor</span></li>
+            <li><span data-icon="check"></span><span><b>Dark:</b> worst adjacent CVD ΔE 13.0, normal-vision ΔE 20.6, all ≥ 3:1 on <code class="a-mono">#131C24</code></span></li>
+            <li><span data-icon="check"></span><span><b>Scatter / bubble:</b> slots 1–3 pass all-pairs in both modes. Past three series, fold into “Other” or facet.</span></li>
+            <li class="x"><span data-icon="alert"></span><span><b>Relief rule:</b> gold (slot 5) is under 3:1 on light. It always ships with a direct label or the table view.</span></li>
+          </ul>
+        </div>
+        <div class="demo">
+          <h4>Sequential · teal</h4><p class="use">Magnitude: heatmaps, density. One hue, light → dark.</p>
+          <div class="seqbar" id="seqSw"></div>
+          <h4 style="margin-top:22px">Diverging · teal ⇄ coral</h4><p class="use">Polarity: money in vs out, above vs below plan. Grey midpoint means “nothing.”</p>
+          <div class="seqbar" id="divSw"></div>
+        </div>
+      </div>
+      <h3 class="ds-sub">Status · reserved, always with icon + label</h3>
+      <div class="a-row">
+        <span class="a-chip a-chip--good"><span data-icon="check" data-size="14"></span>On track</span>
+        <span class="a-chip a-chip--warn"><span data-icon="alert" data-size="14"></span>Watch</span>
+        <span class="a-chip a-chip--bad"><span data-icon="alert" data-size="14"></span>Over budget</span>
+        <span class="a-chip a-chip--info"><span data-icon="info" data-size="14"></span>Insight</span>
+      </div>
+    </section>
+
+    <!-- TYPE -->
+    <section class="ds-sec" id="type">
+      <header>
+        <p class="a-eyebrow">04 · Typography</p>
+        <h2 class="a-h2">A bookish serif for warmth. A precise sans for numbers.</h2>
+        <p class="a-lead"><b>Lora</b> carries the voice in headlines and coach messages, and the italic adds emphasis. <b>Plus Jakarta Sans</b> handles UI and every figure, because money needs crisp, unambiguous numerals. Type sizes scale fluidly between 360px and 1280px.</p>
+      </header>
+      <div class="grid g2">
+        <div class="demo"><div class="specimen">Aa</div><p class="a-small" style="margin-top:12px"><b>Lora</b> · 500 / 600 / 700 · Italic 500 / 600<br>Display, headings, coach voice</p></div>
+        <div class="demo"><div class="specimen specimen--sans">$1,284</div><p class="a-small" style="margin-top:12px"><b>Plus Jakarta Sans</b> · 400 – 800<br>UI, labels, all figures (proportional; tabular in columns)</p></div>
+      </div>
+      <div class="demo" style="margin-top:16px">
+        <div class="type-row"><div class="meta">Display<br>clamp 44 → 88</div><div class="a-display" style="font-size:clamp(2.25rem,1.4rem+3vw,4rem)">Grow with <em>guidance</em></div></div>
+        <div class="type-row"><div class="meta">H1<br>clamp 36 → 60</div><div class="a-h1">Good morning, Emily.</div></div>
+        <div class="type-row"><div class="meta">H2<br>clamp 28 → 44</div><div class="a-h2">Your month at a glance</div></div>
+        <div class="type-row"><div class="meta">H3<br>clamp 21 → 26</div><div class="a-h3">Increase emergency fund savings</div></div>
+        <div class="type-row"><div class="meta">H4 · Sans 700<br>18</div><div class="a-h4">Account summary</div></div>
+        <div class="type-row"><div class="meta">Lead<br>18 / 1.55</div><p class="a-lead">Based on your current data, your emergency fund covers about two months of expenses.</p></div>
+        <div class="type-row"><div class="meta">Body<br>16 / 1.6</div><p class="a-body">Adding budgets helps keep you on track toward your goals. You can change them any time.</p></div>
+        <div class="type-row"><div class="meta">Eyebrow<br>12 · 700 · caps</div><div class="a-eyebrow">Spending optimization insight</div></div>
+        <div class="type-row"><div class="meta">Figure XL<br>Sans 700</div><div class="a-figure a-figure--xl">$168,508<span class="cents">.51</span></div></div>
+        <div class="type-row"><div class="meta">Caption<br>12</div><div class="a-caption">Updated 6:12 am · 4 accounts linked</div></div>
+      </div>
+    </section>
+
+    <!-- TOKENS -->
+    <section class="ds-sec" id="tokens">
+      <header>
+        <p class="a-eyebrow">05 · Space, shape, depth</p>
+        <h2 class="a-h2">Soft corners, generous air</h2>
+        <p class="a-lead">A 4px spacing grid. Rounded, friendly shapes. Soft indigo-tinted shadows for UI, plus one signature <b>lift</b> shadow (a hard offset, from the original brand board) for hero moments.</p>
+      </header>
+      <div class="grid g3">
+        <div class="demo"><h4>Spacing</h4><div id="spaceRows" style="margin-top:12px"></div></div>
+        <div class="demo"><h4>Radius</h4>
+          <div class="grid" style="grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px">
+            <div class="radius-box" style="border-radius:4px">xs 4</div><div class="radius-box" style="border-radius:8px">sm 8</div><div class="radius-box" style="border-radius:12px">md 12</div>
+            <div class="radius-box" style="border-radius:20px">lg 20</div><div class="radius-box" style="border-radius:28px">xl 28</div><div class="radius-box" style="border-radius:99px">pill</div>
+          </div>
+        </div>
+        <div class="demo" style="background:var(--a-bg)"><h4>Elevation</h4>
+          <div class="grid" style="grid-template-columns:1fr 1fr;gap:14px;margin-top:12px">
+            <div class="elev-box" style="box-shadow:var(--e-1)">e-1</div><div class="elev-box" style="box-shadow:var(--e-2)">e-2</div>
+            <div class="elev-box" style="box-shadow:var(--e-3)">e-3</div><div class="elev-box" style="box-shadow:var(--e-lift);border:1.5px solid var(--a-text-ink)">lift</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MOTION -->
+    <section class="ds-sec" id="motion">
+      <header>
+        <p class="a-eyebrow">06 · Motion</p>
+        <h2 class="a-h2">Calm by default. Playful when you make progress.</h2>
+        <p class="a-lead">UI moves with a quick, decelerating ease-out. Springy overshoot is saved for moments of delight: a goal reached, a chip appearing, an illustration. Charts draw in once when they scroll into view. Everything respects <code class="a-mono">prefers-reduced-motion</code>.</p>
+      </header>
+      <div class="grid g2">
+        <div class="demo">
+          <div class="demo-head"><h4>Easing</h4><button class="a-btn a-btn--secondary a-btn--sm" id="playEase" type="button"><span data-icon="play" data-size="14"></span>Play</button></div>
+          <div style="margin-top:10px">
+            <div class="ease-row"><code>--ease-out</code><div class="ease-track" style="--e:var(--ease-out)"><i class="ease-ball"></i></div></div>
+            <div class="ease-row"><code>--ease-in-out</code><div class="ease-track" style="--e:var(--ease-in-out)"><i class="ease-ball"></i></div></div>
+            <div class="ease-row"><code>--ease-spring</code><div class="ease-track" style="--e:var(--ease-spring)"><i class="ease-ball"></i></div></div>
+          </div>
+        </div>
+        <div class="demo">
+          <h4>Duration</h4>
+          <table class="a-table" style="margin-top:8px">
+            <tr><th>Token</th><th class="num">ms</th><th>Use</th></tr>
+            <tr><td class="a-mono">--dur-1</td><td class="num">120</td><td>Hover, press</td></tr>
+            <tr><td class="a-mono">--dur-2</td><td class="num">220</td><td>Toggles, chips, tooltips</td></tr>
+            <tr><td class="a-mono">--dur-3</td><td class="num">420</td><td>Cards, panels, reveals</td></tr>
+            <tr><td class="a-mono">--dur-4</td><td class="num">900</td><td>Chart draw-in</td></tr>
+            <tr><td class="a-mono">--dur-5</td><td class="num">1600</td><td>Illustration loops</td></tr>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ICONS -->
+    <section class="ds-sec" id="icons">
+      <header>
+        <p class="a-eyebrow">07 · Icons</p>
+        <h2 class="a-h2">Rounded line icons</h2>
+        <p class="a-lead">Drawn on a 24px grid with a 2px stroke and round caps and joins, so they share the illustrations' friendly geometry. They inherit <code class="a-mono">currentColor</code>.</p>
+      </header>
+      <div class="icon-grid" id="iconGrid"></div>
+    </section>
+
+    <!-- ILLUSTRATION -->
+    <section class="ds-sec" id="illustration">
+      <header>
+        <p class="a-eyebrow">08 · Illustration</p>
+        <h2 class="a-h2">Meet Sprout, and friends</h2>
+        <p class="a-lead">Native vector art with chunky indigo outlines, teal and mint fills, a gold accent and white sparkles. The cast now includes diverse people alongside the mascots. Every piece has a gentle idle loop, but the rules below keep it rare, spaced out and on-message.</p>
+      </header>
+
+      <h3 class="ds-sub">Mascots · the coach and friends</h3>
+      <div class="illo-grid" data-group="mascots"></div>
+
+      <h3 class="ds-sub">People · a parametric cast</h3>
+      <p class="a-body" style="max-width:68ch;margin-bottom:14px">One bust generator handles skin tone (6), hair (short, curly, long, bun, bob, locs, shaved, hijab), age, glasses, a hearing aid and earrings. Use people for welcome, community and representation moments, as portraits or in scenes.</p>
+      <div class="people-grid" id="peopleGrid"></div>
+
+      <h3 class="ds-sub">People scenes</h3>
+      <div class="illo-grid" data-group="scenes"></div>
+
+      <h3 class="ds-sub">Concept spots</h3>
+      <div class="illo-grid" data-group="concepts"></div>
+
+      <h3 class="ds-sub">States</h3>
+      <div class="illo-grid" data-group="states" style="grid-template-columns:repeat(auto-fill,minmax(180px,240px))"></div>
+
+      <h3 class="ds-sub">What each one says</h3>
+      <div class="demo" style="overflow-x:auto;padding:8px 16px">
+        <table class="a-table" style="min-width:640px">
+          <tr><th>Art</th><th>Conveys</th><th>Use for</th><th>Never for</th></tr>
+          <tr><td><b>Sprout</b></td><td>Your coach, warm and steady</td><td>Nudge avatars, welcome, sign-in</td><td>More than once per screen</td></tr>
+          <tr><td><b>Sprout · wizard</b></td><td>Setup magic</td><td>Onboarding and plan building only</td><td>Everyday screens</td></tr>
+          <tr><td><b>Penny</b></td><td>Small wins, momentum</td><td>Round-ups, first deposit, streaks</td><td>Debt or overspending</td></tr>
+          <tr><td><b>Owl</b></td><td>Curiosity, learning</td><td>Lessons, "why?" explainers</td><td>Warnings</td></tr>
+          <tr><td><b>Umbrella</b></td><td>Protection, calm</td><td>Emergency fund</td><td>Insurance sales or fear messaging</td></tr>
+          <tr><td><b>Sleeping</b></td><td>Nothing needs you</td><td>Empty coach feed, all-clear</td><td>Errors (it reads as "broken")</td></tr>
+          <tr><td><b>Watering</b></td><td>Working on it, growing</td><td>Loading and plan building</td><td>Waits under 1 second</td></tr>
+          <tr><td><b>Celebrate</b></td><td>Joy</td><td>Milestones: step done, goal reached, debt paid</td><td>Routine actions</td></tr>
+          <tr><td><b>People scenes</b></td><td>"This is for people like me"</td><td>Onboarding, community, marketing</td><td>Hardship, debt or warnings</td></tr>
+        </table>
+      </div>
+
+      <h3 class="ds-sub">Placement: subtle by default</h3>
+      <div class="grid g3">
+        <div class="demo"><h4>Size tiers</h4><p class="use">Three sizes only. Pick by how much the moment matters.</p>
+          <div class="tiers"><div><span class="t-hero" data-illo="mascot" data-still aria-label="Hero size"></span><b>Hero</b><small>160–240px · onboarding, milestones</small></div>
+            <div><span class="t-spot" data-illo="penny" data-still aria-label="Spot size"></span><b>Spot</b><small>80–140px · empty states, feature cards</small></div>
+            <div><span class="t-inline" data-illo="mascot" data-still aria-label="Inline size"></span><b>Inline</b><small>40–56px · nudge avatar, portrait</small></div></div></div>
+        <div class="demo"><h4>Do · one per screen, with air</h4><p class="use">The art sits beside the message it supports, facing the content.</p>
+          <div class="phone-demo"><div class="pd-bar"></div><div class="pd-hero"><span data-illo="umbrella" data-still aria-label="Example"></span><i></i><i style="width:60%"></i></div><div class="pd-card"></div><div class="pd-card"></div><div class="pd-btn"></div></div></div>
+        <div class="demo"><h4>Don't · crowd or stack</h4><p class="use">Three characters fighting for attention, one of them sitting on a chart.</p>
+          <div class="phone-demo is-bad"><div class="pd-bar"></div><div class="pd-hero"><span data-illo="penny" data-still aria-label="Example"></span><span data-illo="owl" data-still aria-label="Example"></span></div><div class="pd-card pd-chart"><span data-illo="celebrate" data-still aria-label="Example"></span></div><div class="pd-btn"></div></div></div>
+      </div>
+      <div class="dd-grid" style="margin-top:16px">
+        <div class="dd dd--do"><h5><span data-icon="check"></span>Rules</h5><ul class="checks">
+          <li><span data-icon="check"></span><span><b>One illustration per screen.</b> A second is allowed only at inline size (≤ 56px, e.g. a nudge avatar) in a different region.</span></li>
+          <li><span data-icon="check"></span><span><b>Keep characters at least 2× their own width apart</b>, and at least 24px from any number, chart or table.</span></li>
+          <li><span data-icon="check"></span><span><b>One loop in view.</b> Extra art gets <code class="a-mono">data-still</code>. Off-screen art pauses automatically. Reduced motion stops everything.</span></li>
+          <li><span data-icon="check"></span><span><b>Match the moment</b> using the table above. If you can't name what the art says, cut it.</span></li>
+          <li><span data-icon="check"></span><span><b>Rotate the cast.</b> Vary age, skin tone, hair, family shape and ability across a flow, and portray everyone as capable.</span></li>
+        </ul></div>
+        <div class="dd dd--dont"><h5><span data-icon="x"></span>Don't</h5><ul class="checks">
+          <li class="x"><span data-icon="x"></span><span>Put characters inside chart cards. An empty state may <i>replace</i> a chart, never decorate one.</span></li>
+          <li class="x"><span data-icon="x"></span><span>Deliver bad news with a character. Overdrafts and missed payments get an icon and plain words.</span></li>
+          <li class="x"><span data-icon="x"></span><span>Tie a person to a money problem by appearance. Never show "older person = medical bills" or "young person = debt".</span></li>
+          <li class="x"><span data-icon="x"></span><span>Recolor art with status or data colors, or crop a character at the edge of the screen.</span></li>
+        </ul></div>
+      </div>
+    </section>
+
+    <!-- COMPONENTS -->
+    <section class="ds-sec" id="components">
+      <header>
+        <p class="a-eyebrow">09 · Components</p>
+        <h2 class="a-h2">UI components</h2>
+        <p class="a-lead">Pill buttons in indigo. Forms with a 48px touch height. Chips for status. Everything meets a 44px minimum target and has a visible focus ring.</p>
+      </header>
+      <div class="grid g2">
+        <div class="demo">
+          <h4>Buttons</h4><p class="use">Primary (indigo) for the one main action. Accent (teal) on brand moments. Secondary and ghost for everything else.</p>
+          <div class="stack-v">
+            <div class="a-row"><button class="a-btn">Personalize plan</button><button class="a-btn a-btn--accent">Add funds <span data-icon="plus"></span></button><button class="a-btn a-btn--secondary">View details</button><button class="a-btn a-btn--ghost">Skip</button></div>
+            <div class="a-row"><button class="a-btn a-btn--lg">Get started <span data-icon="arrowRight"></span></button><button class="a-btn a-btn--sm">Small</button><button class="a-btn a-btn--secondary a-btn--icon" aria-label="Search"><span data-icon="search"></span></button><button class="a-btn" disabled>Disabled</button></div>
+            <div class="a-row" style="background:var(--teal-600);padding:16px;border-radius:14px"><button class="a-btn a-btn--light">On brand</button><button class="a-btn a-btn--outline-light">Outline</button></div>
+          </div>
+        </div>
+        <div class="demo">
+          <h4>Form controls</h4><p class="use">Labels sit above the field. Hints are muted text. Currency fields get a fixed prefix.</p>
+          <div class="stack-v">
+            <div class="a-field"><label class="a-label" for="f1">Email address</label><input class="a-input" id="f1" type="email" placeholder="you@example.com"></div>
+            <div class="grid" style="grid-template-columns:1fr 1fr;gap:12px">
+              <div class="a-field"><label class="a-label" for="f2">Frequency</label><select class="a-select" id="f2"><option>Weekly</option><option>Monthly</option></select></div>
+              <div class="a-field"><label class="a-label" for="f3">Budget amount</label><div class="a-input-wrap"><span class="prefix">$</span><input class="a-input" id="f3" inputmode="decimal" value="650"></div></div>
+            </div>
+            <div class="a-field"><label class="a-label" for="f4">Risk tolerance <span class="a-hint">· 1 (low) to 10 (high)</span></label><input class="a-range" id="f4" type="range" min="1" max="10" value="4" style="--fill:33%"></div>
+            <div class="a-row" style="gap:24px"><label class="a-switch"><input type="checkbox" checked><span class="track"></span>Smart nudges</label><label class="a-check"><input type="checkbox" checked>Round-up savings</label></div>
+          </div>
+        </div>
+        <div class="demo">
+          <h4>Chips, segmented control, progress</h4><p class="use">Status chips always pair an icon with a label. Segmented controls switch time ranges.</p>
+          <div class="stack-v">
+            <div class="a-row"><span class="a-chip a-chip--good"><span data-icon="check"></span>On track</span><span class="a-chip a-chip--warn"><span data-icon="alert"></span>Watch</span><span class="a-chip a-chip--bad"><span data-icon="alert"></span>Over</span><span class="a-chip a-chip--brand"><span data-icon="sparkle"></span>AI insight</span><span class="a-chip">Groceries</span></div>
+            <div class="a-seg" role="group" aria-label="Range"><button aria-pressed="false">1W</button><button aria-pressed="false">1M</button><button aria-pressed="true">1Y</button><button aria-pressed="false">5Y</button><button aria-pressed="false">All</button></div>
+            <div><div class="a-row" style="justify-content:space-between;font-size:13px;margin-bottom:6px"><b>Emergency fund</b><span class="a-small">$12,400 of $18,000</span></div><div class="a-progress a-progress--lg"><span style="--value:69%"></span></div></div>
+            <ol class="a-steps" aria-label="Setup progress"><li class="is-done">Profile</li><li class="is-done">Accounts</li><li class="is-current">Goals</li><li>Plan</li></ol>
+          </div>
+        </div>
+        <div class="demo">
+          <h4>Alerts</h4><p class="use">For system messages. AI suggestions use the nudge pattern instead (see below).</p>
+          <div class="stack-v">
+            <div class="a-alert a-alert--good"><span data-icon="check"></span><div><strong>Insight preferences updated</strong>Your coach will prioritize investing goals.</div></div>
+            <div class="a-alert a-alert--warn"><span data-icon="alert"></span><div><strong>Chase connection needs attention</strong>Re-authenticate to keep balances current.</div></div>
+            <div class="a-alert"><span data-icon="lock" style="color:var(--a-info)"></span><div><strong>Read-only access</strong>Aureum can see balances and transactions. It can never move money.</div></div>
+          </div>
+        </div>
+        <div class="demo">
+          <h4>Stat tiles</h4><p class="use">When the story is one number, the number <i>is</i> the chart. Label, value, signed delta vs. a named period, and an optional sparkline.</p>
+          <div class="grid" style="grid-template-columns:1fr 1fr;gap:12px">
+            <div class="a-card" style="padding:18px"><div class="a-stat"><span class="a-stat__label">Savings balance</span><div class="a-stat__row"><span class="a-figure a-figure--md">$18,374</span></div><span class="a-delta a-delta--up"><span data-icon="arrowUp" data-size="14"></span>$1,074 vs Sep</span><div class="a-stat__spark" id="sp1"></div></div></div>
+            <div class="a-card" style="padding:18px"><div class="a-stat"><span class="a-stat__label">Spent this month</span><div class="a-stat__row"><span class="a-figure a-figure--md">$5,020</span></div><span class="a-delta a-delta--up"><span data-icon="arrowDown" data-size="14"></span>3% vs Sep</span><div class="a-stat__spark" id="sp2"></div></div></div>
+          </div>
+        </div>
+        <div class="demo">
+          <h4>Transactions &amp; table</h4><p class="use">Lists for scanning; tables when values must align. Table numbers use tabular figures.</p>
+          <div class="a-txn"><span class="a-txn__icon" data-icon="cart"></span><div><div class="a-txn__name">Whole Foods</div><div class="a-txn__meta">Groceries · Today</div></div><span class="a-txn__amt">−$86.40</span></div>
+          <div class="a-txn"><span class="a-txn__icon" data-icon="food"></span><div><div class="a-txn__name">Sweetgreen</div><div class="a-txn__meta">Dining out · Yesterday</div></div><span class="a-txn__amt">−$18.25</span></div>
+          <div class="a-txn"><span class="a-txn__icon" data-icon="briefcase"></span><div><div class="a-txn__name">Payroll · Brightline</div><div class="a-txn__meta">Income · Oct 1</div></div><span class="a-txn__amt is-in">+$3,210.00</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COACH -->
+    <section class="ds-sec" id="coach">
+      <header>
+        <p class="a-eyebrow">10 · Coach patterns</p>
+        <h2 class="a-h2">Nudges that assist, never overwhelm</h2>
+        <p class="a-lead">Research found people wanted the AI to step in at friction points, not to send generic notifications. Every nudge follows one pattern: <b>what we noticed → why it matters → one easy action</b>. It's in Lora, so it reads like a person talking, not a system message.</p>
+      </header>
+      <div class="grid g2">
+        <div class="stack-v">
+          <div class="a-nudge a-nudge--warn">
+            <div class="a-nudge__avatar" data-illo="mascot" aria-label="Sprout"></div>
+            <div><div class="a-nudge__kicker"><span data-icon="sparkle" data-size="14"></span>Heads up · in 12 days</div><div class="a-nudge__title">Rent and car insurance land the same week.</div><p class="a-nudge__body">Checking could dip to about $480 on Oct 20. Moving $600 from savings now keeps you above your $1,000 cushion.</p></div>
+            <div class="a-nudge__actions"><button class="a-btn a-btn--sm">Move $600</button><button class="a-btn a-btn--ghost a-btn--sm">Remind me later</button></div>
+          </div>
+          <div class="a-nudge a-nudge--good">
+            <div class="a-nudge__avatar" data-illo="mascot" aria-label="Sprout"></div>
+            <div><div class="a-nudge__kicker"><span data-icon="trendUp" data-size="14"></span>Milestone</div><div class="a-nudge__title">You're halfway to your down payment.</div><p class="a-nudge__body">$34,100 saved. At this pace you'll reach $60,000 by next December, two months early.</p></div>
+            <div class="a-nudge__actions"><button class="a-btn a-btn--accent a-btn--sm">See projection</button></div>
+          </div>
+        </div>
+        <div class="demo demo--pad0" style="display:grid;place-items:center;background:var(--a-surface-mint);padding:24px">
+          <div class="phone">
+            <div style="padding:18px 18px 8px;display:flex;justify-content:space-between;align-items:center"><span data-icon="search" style="color:var(--a-text-brand)"></span><span data-logo style="width:28px;color:var(--teal-600)"></span></div>
+            <div style="padding:6px 18px 18px">
+              <h3 class="a-h3" style="font-size:26px">Good morning, Emily.</h3>
+              <div class="a-card" style="margin-top:14px;padding:16px">
+                <div class="a-stat"><span class="a-stat__label">Total balance</span><span class="a-figure a-figure--lg">$168,508<span class="cents">.51</span></span><div class="a-row"><span class="a-chip a-chip--good"><span data-icon="check"></span>On track</span><span class="a-delta a-delta--up">+3.9% this month</span></div></div>
+              </div>
+            </div>
+            <nav class="a-tabbar" aria-label="App"><a href="#coach" aria-current="page"><span data-icon="bank"></span>Home</a><a href="#coach"><span data-icon="pie"></span>Budget</a><a href="#coach"><span data-icon="target"></span>Goals</a><a href="#coach"><span data-icon="bulb"></span>Insights</a><a href="#coach"><span data-icon="menu"></span>More</a></nav>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DATA VIZ -->
+    <section class="ds-sec" id="dataviz">
+      <header>
+        <p class="a-eyebrow">11 · Data visualization</p>
+        <h2 class="a-h2">Charts that answer “am I okay?”</h2>
+        <p class="a-lead">Pick the chart by the job the data does, then apply color by role. Every chart is interactive (crosshair or per-mark tooltips), keyboard-readable with arrow keys, ships a data table for screen readers, and draws itself in once on scroll. Hover, tab, or toggle <b>Table</b> to try it.</p>
+      </header>
+
+      <div class="grid g2">
+        <div class="demo">
+          <div class="demo-head"><div><h4>Area · net worth</h4><p class="use">Use for change over time when one series is the story. 2px line, 12% wash, value at the end.</p></div><div class="chart-tools"><button class="a-btn a-btn--ghost a-btn--sm" data-table-for="c-nw">Table</button></div></div>
+          <div id="c-nw"></div>
+        </div>
+        <div class="demo">
+          <div class="demo-head"><div><h4>Multi-line · category trend</h4><p class="use">Use to compare up to 4 series on the same scale. Legend plus end labels. One tooltip lists every series.</p></div><div class="chart-tools"><button class="a-btn a-btn--ghost a-btn--sm" data-table-for="c-ml">Table</button></div></div>
+          <div id="c-ml"></div>
+        </div>
+        <div class="demo" style="grid-column:1/-1">
+          <div class="demo-head"><div><h4>Projection · goal forecast with likely range</h4><p class="use">Use for the future. Solid line for actuals, dotted line for the forecast, and a widening band for uncertainty. “Today” marks where they meet. This was Lisa's top request: “tell me what's about to go wrong.”</p></div><div class="chart-tools"><button class="a-btn a-btn--ghost a-btn--sm" data-table-for="c-goal">Table</button></div></div>
+          <div id="c-goal"></div>
+        </div>
+        <div class="demo">
+          <div class="demo-head"><div><h4>Columns · emphasis</h4><p class="use">Use to compare periods. One color for one series. Highlight the period that matters and grey out the rest.</p></div><div class="chart-tools"><button class="a-btn a-btn--ghost a-btn--sm" data-table-for="c-col">Table</button></div></div>
+          <div id="c-col"></div>
+        </div>
+        <div class="demo">
+          <div class="demo-head"><div><h4>Diverging columns · cash flow</h4><p class="use">Use for polarity. Money in rises in teal, money out falls in coral, and the net line rides on top. One axis, one unit.</p></div><div class="chart-tools"><button class="a-btn a-btn--ghost a-btn--sm" data-table-for="c-cf">Table</button></div></div>
+          <div id="c-cf"></div>
+        </div>
+        <div class="demo">
+          <h4>Donut · where it went</h4><p class="use">Use for part-to-whole at a glance, with 6 segments at most. The center shows the hovered value.</p>
+          <div id="c-donut"></div>
+        </div>
+        <div class="demo">
+          <h4>Stacked bar · allocation</h4><p class="use">Use for a compact part-to-whole with exact values. Segments are separated by 2px gaps, never outlines.</p>
+          <div id="c-stack" style="margin-top:28px"></div>
+        </div>
+        <div class="demo">
+          <h4>Gauge · financial health score</h4><p class="use">Use for one bounded score with thresholds. The fill takes the status color of its zone.</p>
+          <div id="c-gauge" style="margin-top:8px"></div>
+        </div>
+        <div class="demo">
+          <h4>Budget meters</h4><p class="use">Show progress against a limit. The fill turns from teal to amber to red as you use more. The track is a lighter step of the same color. Status always comes with an icon and label.</p>
+          <div id="c-budget"></div>
+        </div>
+        <div class="demo" style="grid-column:1/-1">
+          <h4>Calendar heatmap · spending rhythm</h4><p class="use">Use to show patterns in daily magnitude with sequential teal: weekends, paydays, spikes. Hover any day.</p>
+          <div id="c-heat" style="overflow-x:auto"></div>
+        </div>
+        <div class="demo">
+          <h4>Goal rings</h4><p class="use">Compact progress for lists of goals.</p>
+          <div class="a-row" style="gap:24px;justify-content:space-around;margin-top:8px">
+            <div style="display:grid;justify-items:center;gap:8px"><div id="r1"></div><span class="a-small">Down payment</span></div>
+            <div style="display:grid;justify-items:center;gap:8px"><div id="r2"></div><span class="a-small">Emergency</span></div>
+            <div style="display:grid;justify-items:center;gap:8px"><div id="r3"></div><span class="a-small">Loans</span></div>
+          </div>
+        </div>
+        <div class="demo">
+          <h4>Tooltip anatomy</h4><p class="use">The value leads and the label follows. Series are keyed with a short line, or a box for bars. Text never takes on the series color.</p>
+          <div style="position:relative;height:120px"><div class="a-tooltip is-on" style="left:0;top:0;position:relative;display:inline-block"><div class="a-tooltip__title">Oct 2026</div><div class="a-tooltip__row"><i style="background:var(--viz-1)"></i><span>Groceries</span><b>$512</b></div><div class="a-tooltip__row"><i style="background:var(--viz-2)"></i><span>Dining out</span><b>$450</b></div><div class="a-tooltip__row"><i style="background:var(--viz-3)"></i><span>Transport</span><b>$318</b></div></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RULES -->
+    <section class="ds-sec" id="rules">
+      <header>
+        <p class="a-eyebrow">12 · Chart rules</p>
+        <h2 class="a-h2">Rules every chart follows</h2>
+      </header>
+      <div class="dd-grid">
+        <div class="dd dd--do"><h5><span data-icon="check"></span>Do</h5><ul class="checks">
+          <li><span data-icon="check"></span>Choose the form first and color last. If the story is one number, use a stat tile.</li>
+          <li><span data-icon="check"></span>Use bars ≤ 24px thick with 4px rounded data ends, 2px lines, and markers ≥ 8px with a 2px surface ring.</li>
+          <li><span data-icon="check"></span>Keep gridlines as solid, recessive hairlines. Label selectively: the endpoint, the extreme, the one that matters.</li>
+          <li><span data-icon="check"></span>Show a legend for 2+ series and direct-label 4 or fewer. Color follows the entity, never its rank.</li>
+          <li><span data-icon="check"></span>Make tooltips enhance, never gate. Every value is also in the table view.</li>
+        </ul></div>
+        <div class="dd dd--dont"><h5><span data-icon="x"></span>Don't</h5><ul class="checks">
+          <li class="x"><span data-icon="x"></span>Use dual y-axes. Index to a common base or split into two charts.</li>
+          <li class="x"><span data-icon="x"></span>Generate a 9th hue. Fold extra categories into “Other” or use small multiples.</li>
+          <li class="x"><span data-icon="x"></span>Use status colors (good / warn / bad) to mean “series 4”.</li>
+          <li class="x"><span data-icon="x"></span>Put a number on every point, use dashed gridlines, or outline marks to separate them.</li>
+          <li class="x"><span data-icon="x"></span>Set figures in the serif. All numbers are Plus Jakarta Sans.</li>
+        </ul></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script src="assets/art.js"></script>
+<script src="assets/charts.js"></script>
+<script src="assets/data.js"></script>
+<script>
+(function () {
+  const root = document.documentElement;
+  /* ---------- theme toggle ---------- */
+  const btn = document.getElementById("themeBtn");
+  const sysDark = matchMedia("(prefers-color-scheme: dark)");
+  const isDark = () => root.dataset.theme ? root.dataset.theme === "dark" : sysDark.matches;
+  try { const t = localStorage.getItem("aureum-theme"); if (t) root.dataset.theme = t; } catch (e) {}
+  const syncBtn = () => { const d = isDark(); btn.querySelector(".lbl").textContent = d ? "Light" : "Dark"; btn.querySelector("[data-icon]").innerHTML = AureumArt.icon(d ? "sun" : "moon", 16); };
+  btn.addEventListener("click", () => { root.dataset.theme = isDark() ? "light" : "dark"; try { localStorage.setItem("aureum-theme", root.dataset.theme); } catch (e) {} syncBtn(); renderRoles(); });
+  syncBtn();
+
+  /* ---------- color ramps ---------- */
+  const cs = () => getComputedStyle(root);
+  const rampDefs = [
+    ["Teal", "Brand primary · 600 is #008080", "teal", [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950]],
+    ["Indigo", "Brand ink · 800 is #1B1B6F", "indigo", [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950]],
+    ["Neutral", "Cool grey, faintly teal", "gray", [0, 50, 100, 200, 300, 400, 500, 600, 700, 800, 950]],
+  ];
+  const lum = (hex) => { const n = parseInt(hex.replace("#", ""), 16); const c = [(n >> 16) & 255, (n >> 8) & 255, n & 255].map((v) => { v /= 255; return v <= .03928 ? v / 12.92 : Math.pow((v + .055) / 1.055, 2.4); }); return .2126 * c[0] + .7152 * c[1] + .0722 * c[2]; };
+  const ink = (hex) => (lum(hex) > .3 ? "#121a33" : "#fff");
+  const rampsEl = document.getElementById("ramps");
+  rampDefs.forEach(([name, note, key, steps]) => {
+    const head = document.createElement("div"); head.className = "ramp-name"; head.innerHTML = `<span style="color:var(--a-text);font-weight:700;font-size:14px">${name}</span><span>${note}</span>`; rampsEl.appendChild(head);
+    const r = document.createElement("div"); r.className = "ramp";
+    steps.forEach((st) => { const hex = cs().getPropertyValue(`--${key}-${st}`).trim(); const d = document.createElement("div"); d.style.background = hex; d.style.color = ink(hex); d.innerHTML = `<b>${st}</b>${hex}`; r.appendChild(d); });
+    rampsEl.appendChild(r);
+  });
+  const atm = document.createElement("div"); atm.className = "ramp-name"; atm.innerHTML = `<span style="color:var(--a-text);font-weight:700;font-size:14px">Atmosphere &amp; accent</span><span>Illustration air, highlights, gold coins</span>`; rampsEl.appendChild(atm);
+  const ar = document.createElement("div"); ar.className = "ramp"; ar.style.gridTemplateColumns = "repeat(9, minmax(0,1fr))";
+  ["mint-100", "mint-200", "mint-300", "mint-400", "sky-200", "sky-300", "gold-300", "gold-400", "coral-500"].forEach((k) => { const hex = cs().getPropertyValue(`--${k}`).trim(); const d = document.createElement("div"); d.style.background = hex; d.style.color = ink(hex); d.innerHTML = `<b>${k}</b>${hex}`; ar.appendChild(d); });
+  rampsEl.appendChild(ar);
+
+  const roleGroups = {
+    "Surface": ["--a-bg", "--a-surface", "--a-surface-sunk", "--a-surface-brand", "--a-surface-ink", "--a-surface-mint"],
+    "Text & line": ["--a-text", "--a-text-2", "--a-text-3", "--a-text-brand", "--a-border-strong", "--a-grid"],
+    "Action & status": ["--a-primary", "--a-accent", "--a-focus", "--a-good", "--a-warn", "--a-bad"],
+  };
+  function renderRoles() {
+    const el = document.getElementById("roles"); el.innerHTML = "";
+    Object.entries(roleGroups).forEach(([g, vars]) => {
+      const card = document.createElement("div"); card.className = "demo";
+      card.innerHTML = `<h4 style="margin-bottom:8px">${g}</h4>`;
+      vars.forEach((v) => { const val = cs().getPropertyValue(v).trim(); const row = document.createElement("div"); row.className = "sw"; row.innerHTML = `<i style="background:var(${v})"></i><div><b>${v.replace("--a-", "")}</b><code>${v} · ${val}</code></div>`; card.appendChild(row); });
+      el.appendChild(card);
+    });
+    const cat = document.getElementById("catSw"); cat.innerHTML = "";
+    ["teal", "indigo", "coral", "sky", "gold", "magenta", "leaf", "plum"].forEach((n, i) => { const val = cs().getPropertyValue(`--viz-${i + 1}`).trim(); const d = document.createElement("div"); d.style.background = `var(--viz-${i + 1})`; d.innerHTML = `<span>${i + 1} · ${n}</span><code>${val}</code>`; cat.appendChild(d); });
+  }
+  renderRoles();
+  sysDark.addEventListener("change", () => { syncBtn(); renderRoles(); });
+  document.getElementById("seqSw").innerHTML = [1, 2, 3, 4, 5, 6, 7].map((i) => `<div style="background:var(--seq-${i})"></div>`).join("");
+  document.getElementById("divSw").innerHTML = ["neg-3", "neg-2", "neg-1", "mid", "pos-1", "pos-2", "pos-3"].map((k) => `<div style="background:var(--div-${k})"></div>`).join("");
+
+  /* ---------- spacing rows ---------- */
+  document.getElementById("spaceRows").innerHTML = [[1, 4], [2, 8], [3, 12], [4, 16], [6, 24], [8, 32], [12, 48], [16, 64], [24, 96]].map(([k, px]) => `<div class="space-row"><span>--sp-${k}</span><i style="width:${px * 1.4}px"></i><span>${px}px</span></div>`).join("");
+
+  /* ---------- motion demo ---------- */
+  document.getElementById("playEase").addEventListener("click", () => document.querySelectorAll(".ease-track").forEach((t) => t.classList.toggle("go")));
+
+  /* ---------- icons & illos ---------- */
+  document.getElementById("iconGrid").innerHTML = AureumArt.ICONS.map((n) => `<div class="icon-cell">${AureumArt.icon(n, 24)}<span>${n}</span></div>`).join("");
+  const illoNames = { mascot: "Sprout · coach", wizard: "Sprout · AI setup", piggy: "Savings", growth: "Investing", insight: "Insights", target: "Goals", payoff: "Debt payoff", shield: "Privacy & security", community: "Community", learn: "Learning", connect: "Connect accounts",
+    celebrate: "Celebrate · milestones", wheelchair: "On the move", family: "Family & home", elder: "Peace of mind", student: "Learning & growth", penny: "Penny · small wins", owl: "Owl · lessons", umbrella: "Rainy-day fund", sleeping: "All quiet · empty state", watering: "Growing · loading" };
+  const groups = { mascots: ["mascot", "wizard", "penny", "owl", "umbrella"], scenes: ["celebrate", "wheelchair", "family", "elder", "student"], concepts: ["piggy", "growth", "insight", "shield", "target", "community", "learn", "payoff", "connect"], states: ["sleeping", "watering"] };
+  document.querySelectorAll("[data-group]").forEach((g) => { g.innerHTML = groups[g.dataset.group].map((n) => `<div class="illo-cell"><div data-illo="${n}" role="img" aria-label="${illoNames[n]}">${AureumArt.illo(n)}</div><b>${illoNames[n]}</b></div>`).join(""); });
+  document.getElementById("peopleGrid").innerHTML = AureumArt.PEOPLE.map((label, i) => `<figure><div data-person="${i}"></div><figcaption>${label}</figcaption></figure>`).join("");
+  AureumArt.hydrate(document.getElementById("illustration"));
+
+  /* ---------- charts ---------- */
+
+  const D = AureumData, V = AureumViz;
+  V.spark(document.getElementById("sp1"), { values: D.savings, color: "var(--viz-1)" });
+  V.spark(document.getElementById("sp2"), { values: D.spend, color: "var(--viz-2)" });
+  V.line(document.getElementById("c-nw"), { label: "Net worth, last 12 months", labels: D.months, series: [{ name: "Net worth", values: D.netWorth }], area: true, height: 240 });
+  V.line(document.getElementById("c-ml"), { label: "Monthly spend by category", labels: D.months, height: 240, yFormat: V.fmt.compact, series: [
+    { name: "Groceries", values: [598, 702, 560, 571, 604, 590, 618, 640, 585, 602, 560, 512] },
+    { name: "Dining out", values: [310, 488, 260, 284, 330, 305, 520, 342, 298, 360, 395, 450] },
+    { name: "Transport", values: [280, 300, 340, 290, 310, 296, 330, 350, 302, 290, 334, 318] },
+  ] });
+  V.line(document.getElementById("c-goal"), { label: "Down payment goal forecast", labels: D.goalLabels, height: 300, yMin: 15000,
+    series: [{ name: "Saved", values: D.goalPlan, forecastFrom: 9 }],
+    band: { lo: D.goalLo, hi: D.goalHi, from: 9, name: "Likely range" },
+    markers: [{ i: 9, label: "Today" }] });
+  V.bars(document.getElementById("c-col"), { label: "Monthly spending", categories: D.months, series: [{ name: "Spent", values: D.spend }], highlight: 11, height: 240 });
+  V.cashflow(document.getElementById("c-cf"), { label: "Cash flow, last 12 months", categories: D.months, income: D.income, spend: D.spend, height: 260 });
+  V.donut(document.getElementById("c-donut"), { label: "October spending by category", items: D.categories.map((c, i) => ({ ...c, color: c.label === "Other" ? "var(--viz-muted)" : `var(--viz-${i + 1})` })), centerLabel: "October spend", size: 220 });
+  V.stack(document.getElementById("c-stack"), { items: [{ label: "US stocks", value: 72400 }, { label: "Int'l stocks", value: 31800 }, { label: "Bonds", value: 24100 }, { label: "Cash", value: 12600 }, { label: "Crypto", value: 9234 }] });
+  V.gauge(document.getElementById("c-gauge"), { value: 87, grade: "B+", label: "Financial health" });
+  V.budget(document.getElementById("c-budget"), { items: D.budgets });
+  V.heatmap(document.getElementById("c-heat"), { label: "Daily spending, 18 weeks", values: D.daily, start: new Date(2026, 5, 1) });
+  V.ring(document.getElementById("r1"), { value: .57, label: "Down payment" });
+  V.ring(document.getElementById("r2"), { value: .69, color: "var(--viz-2)", label: "Emergency fund" });
+  V.ring(document.getElementById("r3"), { value: .68, color: "var(--viz-3)", label: "Loans" });
+
+  document.querySelectorAll("[data-table-for]").forEach((b) => b.addEventListener("click", () => {
+    const el = document.getElementById(b.dataset.tableFor);
+    const on = el.classList.toggle("show-table");
+    b.textContent = on ? "Chart" : "Table";
+  }));
+
+  /* ---------- nav scrollspy ---------- */
+  const links = [...document.querySelectorAll(".ds-nav a[href^='#']")];
+  const spy = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) links.forEach((l) => l.classList.toggle("is-active", l.getAttribute("href") === "#" + e.target.id)); }), { rootMargin: "-30% 0px -60% 0px" });
+  document.querySelectorAll(".ds-sec").forEach((s) => spy.observe(s));
+})();
+</script>
+</body>
+</html>

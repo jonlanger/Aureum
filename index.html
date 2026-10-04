@@ -1,0 +1,757 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aureum Finance</title>
+<meta name="description" content="Aureum is the AI finance coach that plans around your goals and nudges you before small problems become big ones.">
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/components.css">
+<style>
+  body { overflow-x: hidden; }
+  section { position: relative; }
+  .sec { padding: clamp(72px, 10vw, 128px) 0; }
+  .sec-head { max-width: 680px; margin-bottom: clamp(32px, 5vw, 56px); }
+  .sec-head .a-h2 { margin: 12px 0 16px; }
+  .sec-head--center { margin-inline: auto; text-align: center; }
+
+  /* ---------- NAV ---------- */
+  .nav { position: fixed; inset: 0 0 auto; z-index: 50; transition: background var(--dur-3), box-shadow var(--dur-3), color var(--dur-3); color: #fff; }
+  .nav__in { display: flex; align-items: center; gap: 24px; height: 72px; }
+  .nav .a-logo { color: inherit; }
+  .nav__links { display: flex; gap: 4px; margin-left: 16px; }
+  .nav__links a { color: inherit; opacity: .85; text-decoration: none; font-size: 14px; font-weight: 600; padding: 8px 12px; border-radius: 99px; transition: background var(--dur-2), opacity var(--dur-2); }
+  .nav__links a:hover { opacity: 1; background: rgba(255,255,255,.12); }
+  .nav__right { margin-left: auto; display: flex; gap: 8px; align-items: center; }
+  .nav .icon-btn { width: 40px; height: 40px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,.35); background: transparent; color: inherit; display: grid; place-items: center; cursor: pointer; }
+  .nav .icon-btn svg { width: 18px; height: 18px; }
+  .nav.is-solid { background: color-mix(in srgb, var(--a-surface) 88%, transparent); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); box-shadow: 0 1px 0 var(--a-border); color: var(--a-text-ink); }
+  .nav.is-solid .a-logo span[data-logo] { color: var(--teal-600) !important; }
+  .nav.is-solid .nav__links a:hover { background: var(--a-surface-sunk); }
+  .nav.is-solid .icon-btn { border-color: var(--a-border-strong); }
+  .nav .cta-solid { display: none; }
+  .nav__signin { color: inherit; font-weight: 700; font-size: 14px; text-decoration: none; padding: 10px 14px; border-radius: 99px; opacity: .9; }
+  .nav__signin:hover { opacity: 1; background: rgba(255,255,255,.12); }
+  .nav.is-solid .nav__signin:hover { background: var(--a-surface-sunk); }
+  @media (max-width: 880px) { .nav__signin { display: none; } }
+  .nav.is-solid .cta-light { display: none; }
+  .nav.is-solid .cta-solid { display: inline-flex; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .nav.is-solid { color: var(--a-text); } }
+  :root[data-theme="dark"] .nav.is-solid { color: var(--a-text); }
+  .nav .nav__menu { display: none; }
+  @media (max-width: 880px) {
+    .nav__links { display: none; }
+    .nav .nav__menu { display: grid; }
+    .nav .cta-light, .nav.is-solid .cta-solid { display: none; }
+  }
+  .drawer { position: fixed; inset: 0; z-index: 60; background: var(--a-surface); padding: 20px var(--gutter); display: flex; flex-direction: column; gap: 4px; transform: translateY(-100%); transition: transform var(--dur-3) var(--ease-out); visibility: hidden; }
+  .drawer.is-open { transform: none; visibility: visible; }
+  .drawer a.link { font-family: var(--font-display); font-size: 32px; font-weight: 600; color: var(--a-text-ink); text-decoration: none; padding: 10px 0; border-bottom: 1px solid var(--a-border); }
+
+  /* ---------- HERO ---------- */
+  .hero { background: var(--teal-600); color: #fff; padding: 136px 0 0; overflow: hidden; }
+  .hero__grid { position: relative; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: 48px; align-items: end; }
+  .hero__copy { padding-bottom: clamp(64px, 9vw, 120px); }
+  .hero .pill { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px 6px 6px; border-radius: 99px; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.22); font-size: 13px; font-weight: 600; }
+  .hero .pill b { background: var(--gold-400); color: var(--indigo-900); padding: 2px 8px; border-radius: 99px; font-size: 11px; letter-spacing: .04em; }
+  .hero h1 { color: #fff; margin: 24px 0 22px; font-size: clamp(3rem, 1.6rem + 6vw, 6.25rem); line-height: .98; }
+  .hero h1 em { color: var(--mint-300); }
+  .hero h1 .word { display: inline-block; opacity: 0; transform: translateY(.4em); animation: rise .9s var(--ease-out) forwards; animation-delay: calc(var(--i) * 110ms + 150ms); }
+  @keyframes rise { to { opacity: 1; transform: none; } }
+  .hero .a-lead { color: rgba(255,255,255,.85); max-width: 46ch; font-size: clamp(1.05rem, .95rem + .4vw, 1.25rem); }
+  .hero__ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+  .hero__trust { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 36px; font-size: 13px; color: rgba(255,255,255,.75); font-weight: 500; }
+  .hero__trust span { display: inline-flex; align-items: center; gap: 8px; }
+  .hero__trust svg { width: 16px; height: 16px; color: var(--mint-300); }
+
+  .stage { position: relative; height: clamp(520px, 52vw, 640px); }
+  .phone { position: absolute; left: 50%; bottom: -40px; transform: translateX(-50%); width: 320px; height: 640px; border-radius: 48px; background: #0b1218; padding: 10px; box-shadow: 0 40px 80px -20px rgba(8, 42, 44, .6), 0 0 0 1.5px rgba(255,255,255,.08) inset; animation: phoneIn 1.1s var(--ease-out) both .2s; }
+  @keyframes phoneIn { from { opacity: 0; transform: translate(-50%, 60px); } }
+  .phone__screen { height: 100%; border-radius: 39px; background: var(--a-bg); overflow: hidden; color: var(--a-text); position: relative; }
+  .phone__notch { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); width: 96px; height: 28px; border-radius: 20px; background: #0b1218; z-index: 2; }
+  .phone__top { display: flex; justify-content: space-between; align-items: center; padding: 48px 20px 6px; }
+  .phone__top svg { width: 20px; height: 20px; }
+  .phone h3 { font-family: var(--font-display); font-weight: 600; font-size: 24px; color: var(--a-text-ink); margin: 6px 20px 14px; letter-spacing: -.01em; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .phone h3 { color: var(--a-text); } }
+  :root[data-theme="dark"] .phone h3 { color: var(--a-text); }
+  .phone .mini { margin: 0 14px 10px; background: var(--a-surface); border-radius: 18px; padding: 14px 16px; box-shadow: var(--e-1); border: 1px solid var(--a-border); }
+  .phone .mini .lbl { font-size: 12px; color: var(--a-text-2); font-weight: 600; }
+  .phone .mini .a-figure { font-size: 30px; margin: 6px 0 8px; }
+  .phone #heroSpark { height: 64px; margin: 4px -4px 0; }
+  .phone .goals { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 0 14px; }
+  .phone .goals .mini { margin: 0; display: grid; justify-items: center; gap: 6px; padding: 12px; text-align: center; font-size: 11px; font-weight: 700; }
+  .phone .a-tabbar { position: absolute; bottom: 0; left: 0; right: 0; padding-bottom: 18px; }
+
+  .float { position: absolute; z-index: 3; }
+  .float--nudge { right: -8px; top: 60px; width: 300px; animation: a-pop .7s var(--ease-spring) both 1.5s; }
+  .float--nudge .a-nudge { padding: 16px; box-shadow: var(--e-4); }
+  .float--nudge .a-nudge__title { font-size: 16px; }
+  .float--chip { left: 0; top: 210px; animation: a-pop .6s var(--ease-spring) both 2.1s; }
+  .float--chip .card { background: var(--a-surface); color: var(--a-text); border-radius: 16px; padding: 12px 14px; box-shadow: var(--e-4); display: flex; gap: 12px; align-items: center; }
+  .float--chip .card .ico { width: 36px; height: 36px; border-radius: 10px; background: var(--a-good-soft); color: var(--a-good); display: grid; place-items: center; }
+  .float--chip .card b { display: block; font-size: 13px; }
+  .float--chip .card span { font-size: 12px; color: var(--a-text-3); }
+  .float--sprout { left: -10px; bottom: 30px; width: 150px; animation: a-pop .8s var(--ease-spring) both 1s; }
+  .float--coin { width: 34px; height: 34px; border-radius: 50%; background: var(--gold-400); border: 3px solid var(--indigo-800); display: grid; place-items: center; font-weight: 800; color: var(--indigo-800); font-size: 15px; animation: a-float 4s ease-in-out infinite; }
+  @media (max-width: 1080px) { .float--nudge { right: -30px; width: 270px; } }
+  @media (max-width: 960px) {
+    .hero__grid { grid-template-columns: 1fr; gap: 0; }
+    .hero__copy { padding-bottom: 32px; }
+    .stage { height: 640px; max-width: 560px; width: 100%; margin-inline: auto; }
+    .float--nudge { right: 0; top: auto; bottom: 150px; }
+    .float--chip { top: 300px; left: -8px; }
+  }
+  @media (max-width: 560px) {
+    .stage { height: 580px; }
+    .phone { width: 280px; height: 580px; border-radius: 42px; }
+    .phone__screen { border-radius: 33px; }
+    .float--nudge { width: 240px; right: -6px; bottom: 130px; }
+    .float--nudge .a-nudge__body, .float--nudge .a-nudge__actions { display: none; }
+    .float--chip { top: 190px; left: -6px; }
+    .float--sprout { width: 110px; left: -16px; }
+    .float--coin { display: none; }
+    .phone h3 { font-size: 20px; }
+    .phone .mini .a-figure { font-size: 26px; }
+    .hero__ctas .a-btn { flex: 1 1 auto; }
+  }
+
+  /* ---------- MARQUEE ---------- */
+  .marquee { background: var(--indigo-800); color: #fff; overflow: hidden; padding: 18px 0; }
+  .marquee__track { display: flex; width: max-content; animation: marquee 38s linear infinite; }
+  .marquee:hover .marquee__track { animation-play-state: paused; }
+  .marquee__item { display: inline-flex; align-items: center; gap: 12px; padding: 0 28px; font-family: var(--font-display); font-size: clamp(18px, 2vw, 24px); font-weight: 500; white-space: nowrap; }
+  .marquee__item svg { width: 22px; height: 22px; color: var(--mint-300); }
+  @keyframes marquee { to { transform: translateX(-50%); } }
+
+  /* ---------- TWO MOVES ---------- */
+  .moves { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(32px, 5vw, 72px); align-items: center; }
+  .moves__tabs { display: grid; gap: 12px; margin-top: 32px; }
+  .move-tab { text-align: left; display: grid; grid-template-columns: 56px 1fr; gap: 16px; align-items: center; padding: 16px; border-radius: var(--r-lg); border: 1.5px solid var(--a-border); background: var(--a-surface); cursor: pointer; transition: border-color var(--dur-2), box-shadow var(--dur-2), transform var(--dur-2) var(--ease-out); }
+  .move-tab:hover { transform: translateY(-2px); }
+  .move-tab[aria-selected="true"] { border-color: var(--a-text-ink); box-shadow: var(--e-lift); }
+  .move-tab .av { width: 56px; height: 56px; border-radius: 16px; display: grid; place-items: center; }
+  .move-tab .av [data-illo] { width: 52px; }
+  .move-tab b { display: block; font-size: 15px; color: var(--a-text); }
+  .move-tab span { font-size: 13px; color: var(--a-text-2); }
+  .moves__panel { position: relative; background: var(--a-surface); border: 1px solid var(--a-border); border-radius: var(--r-xl); padding: clamp(20px, 3vw, 32px); box-shadow: var(--e-3); min-height: 470px; }
+  .move-view { display: none; }
+  .move-view.is-on { display: block; animation: a-pop .5s var(--ease-out) both; }
+  .move-view .a-nudge { margin-top: 18px; box-shadow: var(--e-2); }
+  .stand-grid { display: grid; grid-template-columns: auto 1fr; gap: 24px; align-items: center; }
+  .stand-stats { display: grid; gap: 14px; }
+  .stand-stats .a-card { padding: 16px; }
+  .quote-mini { margin-top: 28px; padding-left: 16px; border-left: 3px solid var(--a-accent); font-family: var(--font-display); font-style: italic; font-size: 1.15rem; color: var(--a-text-2); line-height: 1.5; }
+  .quote-mini cite { display: block; font-family: var(--font-sans); font-style: normal; font-size: 13px; color: var(--a-text-3); margin-top: 8px; }
+  @media (max-width: 960px) { .moves { grid-template-columns: 1fr; } }
+  @media (max-width: 560px) { .stand-grid { grid-template-columns: 1fr; justify-items: center; } .stand-stats { width: 100%; } }
+
+  /* ---------- BENTO ---------- */
+  .bento { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; }
+  .bento > * { border-radius: var(--r-xl); padding: clamp(20px, 2.4vw, 28px); background: var(--a-surface); border: 1px solid var(--a-border); overflow: hidden; position: relative; }
+  .bento .b-plan { grid-column: span 3; grid-row: span 2; }
+  .bento .b-track { grid-column: span 3; }
+  .bento .b-save { grid-column: span 3; background: var(--mint-200); border: 0; color: var(--indigo-900); }
+  .bento .b-debt { grid-column: span 2; background: var(--indigo-800); color: #fff; border: 0; }
+  .bento .b-learn { grid-column: span 2; background: var(--sky-200); border: 0; color: var(--indigo-900); }
+  .bento .b-comm { grid-column: span 2; background: var(--teal-600); color: #fff; border: 0; }
+  .bento h3 { font-family: var(--font-display); font-weight: 600; font-size: clamp(1.35rem, 1.1rem + .8vw, 1.75rem); line-height: 1.15; margin: 10px 0 8px; letter-spacing: -.01em; }
+  .bento p { margin: 0; font-size: 14.5px; color: inherit; opacity: .8; max-width: 40ch; }
+  .bento .a-eyebrow { display: inline-flex; gap: 6px; align-items: center; }
+  .bento .a-eyebrow svg { width: 16px; height: 16px; }
+  .b-save .a-eyebrow, .b-learn .a-eyebrow { color: var(--teal-800); }
+  .b-debt .a-eyebrow, .b-comm .a-eyebrow { color: var(--mint-300); }
+  .b-save h3, .b-learn h3 { color: var(--indigo-900); }
+  .b-plan h3, .b-track h3 { color: var(--a-text-ink); }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) :is(.b-plan, .b-track) h3 { color: var(--a-text); } }
+  :root[data-theme="dark"] :is(.b-plan, .b-track) h3 { color: var(--a-text); }
+  .bento .illo { position: absolute; right: -6px; bottom: -6px; width: clamp(120px, 14vw, 170px); }
+  .b-track .row { display: grid; grid-template-columns: 170px 1fr; gap: 20px; align-items: center; margin-top: 16px; }
+  .b-track .txns .a-txn { padding: 8px 0; }
+  .b-save .ring-row { display: flex; gap: 18px; align-items: center; margin-top: 18px; max-width: 60%; }
+  .b-save .viz-ring__track { stroke: rgba(11,63,65,.14); }
+  .b-save .viz-ring__value { color: var(--indigo-900); }
+  .b-debt .bar { margin-top: 18px; max-width: 62%; }
+  .b-debt .bar .a-progress { background: rgba(255,255,255,.15); }
+  .b-debt .bar .a-progress span { background: var(--mint-300); }
+  .b-debt .bar small { display: flex; justify-content: space-between; font-size: 12px; opacity: .75; margin-top: 8px; }
+  .b-plan #homeBudget { margin-top: 22px; }
+  .b-comm .a-avatar-group { margin-top: 18px; }
+  .b-comm .a-avatar { border-color: var(--teal-600); width: 46px; height: 46px; }
+  .b-comm .a-avatar.portrait { background: var(--mint-200); overflow: hidden; padding: 0; }
+  .b-comm .a-avatar.portrait svg { width: 100%; height: 100%; transform: scale(1.25) translateY(6%); }
+  @media (max-width: 1024px) {
+    .bento { grid-template-columns: repeat(2, 1fr); }
+    .bento .b-plan, .bento .b-track, .bento .b-save { grid-column: span 2; grid-row: auto; }
+    .bento .b-debt, .bento .b-learn, .bento .b-comm { grid-column: span 1; }
+    .bento .b-comm { grid-column: span 2; }
+  }
+  @media (max-width: 640px) {
+    .bento { grid-template-columns: 1fr; }
+    .bento > * { grid-column: auto !important; }
+    .b-track .row { grid-template-columns: 1fr; justify-items: center; }
+    .b-track .txns { width: 100%; }
+    .bento .illo { position: relative; right: auto; bottom: auto; width: 116px !important; margin: 8px -8px -20px auto; }
+    .b-save .ring-row, .b-debt .bar { max-width: none; }
+  }
+
+  /* ---------- LEGIBLE (dark data section) ---------- */
+  .legible { background: var(--indigo-950); color: #fff; overflow: hidden; }
+  .legible .a-h2 { color: #fff; }
+  .legible .a-h2 em { color: var(--mint-300); }
+  .legible .a-lead { color: rgba(255,255,255,.75); }
+  .legible .a-eyebrow { color: var(--mint-300); }
+  .dash { --a-surface: #131c4a; --a-surface-2: #17205a; --a-surface-sunk: #0e1540; --a-border: rgba(255,255,255,.09); --a-border-strong: rgba(255,255,255,.16);
+    --a-text: #f2f4ff; --a-text-2: #c1c6e8; --a-text-3: #8d93bf; --a-text-ink: #fff; --a-grid: #212a62; --a-axis: #343e80; --viz-surface: #131c4a;
+    --div-pos-2: #2aa59d; --div-neg-2: #e06a35; --a-accent: #34a8a1; --a-accent-soft: #14305a; --a-text-brand: #8fdcd7;
+    --seq-1: #18245c; --seq-2: #0f4846; --seq-3: #0d625f; --seq-4: #13817b; --seq-5: #2aa59d; --seq-6: #5fcac4; --seq-7: #a6e9e4;
+    --a-good-text: #8fd46d; --a-bad-text: #f59a8a; --viz-area-opacity: .2; --viz-1: #1aa8a0; color: var(--a-text); }
+  .dash__filters { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin-bottom: 16px; }
+  .dash__filters .a-seg { background: rgba(255,255,255,.06); }
+  .dash__filters .a-seg button[aria-pressed="true"] { background: #fff; color: var(--indigo-900); }
+  .dash__filters .lbl { font-size: 13px; color: var(--a-text-3); margin-left: auto; }
+  .dash__grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; }
+  .dash .a-card { background: var(--a-surface); border-color: var(--a-border); box-shadow: none; }
+  .dash .tile { grid-column: span 3; }
+  .dash .wide { grid-column: span 8; }
+  .dash .side { grid-column: span 4; }
+  .dash .full { grid-column: 1 / -1; }
+  @media (max-width: 1024px) { .dash .tile { grid-column: span 6; } .dash .wide, .dash .side { grid-column: 1 / -1; } }
+  @media (max-width: 560px) { .dash .tile { grid-column: span 6; padding: 16px; } .dash .tile .a-figure--md { font-size: 1.25rem; } .dash__grid { gap: 10px; } }
+  .dash .refetch { transition: opacity var(--dur-2); }
+  .dash.is-loading .refetch { opacity: .45; }
+
+  /* ---------- HOW ---------- */
+  .how { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; counter-reset: how; }
+  .how__step { position: relative; padding: 28px; border-radius: var(--r-xl); background: var(--a-surface); border: 1px solid var(--a-border); }
+  .how__step .art { aspect-ratio: 1.3; border-radius: var(--r-lg); display: grid; place-items: center; margin-bottom: 22px; }
+  .how__step .art [data-illo] { width: 62%; }
+  .how__step:nth-child(1) .art { background: var(--sky-200); }
+  .how__step:nth-child(2) .art { background: var(--mint-200); }
+  .how__step:nth-child(3) .art { background: #ffe9b8; }
+  .how__step .num { position: absolute; top: 40px; left: 40px; width: 36px; height: 36px; border-radius: 50%; background: var(--indigo-800); color: #fff; font-weight: 800; display: grid; place-items: center; font-size: 14px; }
+  .how__step h3 { font-family: var(--font-display); font-size: 1.5rem; font-weight: 600; margin: 0 0 8px; color: var(--a-text-ink); }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .how__step h3 { color: var(--a-text); } }
+  :root[data-theme="dark"] .how__step h3 { color: var(--a-text); }
+  .how__step p { margin: 0; color: var(--a-text-2); font-size: 15px; }
+  @media (max-width: 900px) { .how { grid-template-columns: 1fr; max-width: 520px; margin-inline: auto; } }
+
+  /* ---------- SIMULATOR ---------- */
+  .sim { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 20px; background: var(--a-surface); border-radius: var(--r-xl); border: 1px solid var(--a-border); padding: clamp(20px, 3vw, 36px); box-shadow: var(--e-3); }
+  .sim__controls { display: grid; gap: 28px; align-content: start; }
+  .sim__out { padding: 20px; border-radius: var(--r-lg); background: var(--a-surface-mint); display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; }
+  .sim__out .a-figure { font-size: clamp(28px, 4vw, 40px); color: var(--indigo-900); }
+  .sim__out .a-small { color: var(--teal-900); }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .sim__out :is(.a-figure, .a-small) { color: var(--a-text); } }
+  :root[data-theme="dark"] .sim__out :is(.a-figure, .a-small) { color: var(--a-text); }
+  .sim__out [data-illo] { width: 84px; }
+  .sim__val { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+  .sim__val output { font-weight: 800; font-size: 20px; color: var(--a-text); font-variant-numeric: tabular-nums; }
+  @media (max-width: 900px) { .sim { grid-template-columns: 1fr; } }
+
+  /* ---------- PERSONAS ---------- */
+  .people { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 8px var(--gutter) 28px; margin: 0 calc(var(--gutter) * -1); scrollbar-width: thin; }
+  .person { scroll-snap-align: start; flex: 0 0 min(300px, 82vw); border-radius: var(--r-xl); background: var(--a-surface); border: 1px solid var(--a-border); overflow: hidden; transition: transform var(--dur-3) var(--ease-out), box-shadow var(--dur-3); }
+  .person:hover { transform: translateY(-6px); box-shadow: var(--e-3); }
+  .person .art { height: 170px; display: grid; place-items: center; }
+  .person .art .ill { width: 140px; }
+  .person:nth-child(5n+1) .art { background: var(--mint-200); }
+  .person:nth-child(5n+2) .art { background: var(--sky-200); }
+  .person:nth-child(5n+3) .art { background: #ffe9b8; }
+  .person:nth-child(5n+4) .art { background: #dcdcf5; }
+  .person:nth-child(5n) .art { background: #fadbe9; }
+  .person .body { padding: 20px; }
+  .person .who { display: flex; gap: 12px; align-items: center; }
+  .person .who b { display: block; font-size: 15px; }
+  .person .who span { font-size: 13px; color: var(--a-text-3); }
+  .person .goal { margin-top: 18px; display: flex; gap: 14px; align-items: center; }
+  .person .goal div:last-child b { display: block; font-size: 13px; color: var(--a-text-2); font-weight: 600; }
+  .person .goal div:last-child span { font-size: 18px; font-weight: 800; }
+
+  /* ---------- QUOTE ---------- */
+  .quote { background: var(--mint-200); color: var(--indigo-900); text-align: center; overflow: hidden; }
+  .quote blockquote { margin: 0 auto; max-width: 22ch; font-family: var(--font-display); font-style: italic; font-weight: 500; font-size: clamp(2rem, 1.2rem + 3.6vw, 4rem); line-height: 1.1; letter-spacing: -.02em; }
+  .quote cite { display: block; margin-top: 28px; font-style: normal; font-size: 15px; font-weight: 600; color: var(--teal-900); }
+  .quote cite span { font-weight: 400; opacity: .8; }
+  .quote .deco { position: absolute; width: clamp(90px, 12vw, 160px); }
+  @media (max-width: 900px) { .quote .deco { display: none; } }
+
+  /* ---------- SECURITY ---------- */
+  .secure { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: clamp(32px, 6vw, 80px); align-items: center; }
+  .secure__art { background: var(--teal-600); border-radius: var(--r-xl); aspect-ratio: 1; display: grid; place-items: center; box-shadow: var(--e-lift); }
+  .secure__art [data-illo] { width: 64%; }
+  .secure__list { display: grid; gap: 4px; margin-top: 28px; }
+  .secure__item { display: grid; grid-template-columns: 44px 1fr; gap: 16px; padding: 18px 0; border-bottom: 1px solid var(--a-border); }
+  .secure__item .ic { width: 44px; height: 44px; border-radius: 14px; background: var(--a-accent-soft); color: var(--a-text-brand); display: grid; place-items: center; }
+  .secure__item b { display: block; font-size: 16px; margin-bottom: 2px; }
+  .secure__item span { color: var(--a-text-2); font-size: 15px; }
+  @media (max-width: 860px) { .secure { grid-template-columns: 1fr; } .secure__art { max-width: 380px; width: 100%; margin-inline: auto; } }
+
+  /* ---------- CTA + FOOTER ---------- */
+  .cta { background: var(--teal-600); color: #fff; overflow: hidden; }
+  .cta__in { display: grid; grid-template-columns: 1fr auto; gap: 32px; align-items: center; }
+  .cta .a-h1 { color: #fff; max-width: 14ch; }
+  .cta .a-h1 em { color: var(--mint-300); }
+  .cta .a-lead { color: rgba(255,255,255,.85); margin-top: 16px; }
+  .cta [data-illo] { width: clamp(180px, 22vw, 280px); }
+  .store { display: inline-flex; align-items: center; gap: 10px; height: 54px; padding: 0 20px; border-radius: 14px; background: #0b1218; color: #fff; text-decoration: none; font-weight: 700; font-size: 15px; transition: transform var(--dur-1); }
+  .store:hover { transform: translateY(-2px); }
+  .store small { display: block; font-size: 10px; font-weight: 500; opacity: .7; line-height: 1; }
+  .store svg { width: 24px; height: 24px; }
+  @media (max-width: 760px) { .cta__in { grid-template-columns: 1fr; } .cta [data-illo] { justify-self: center; } }
+  footer { background: var(--a-surface); border-top: 1px solid var(--a-border); padding: 56px 0 40px; font-size: 14px; color: var(--a-text-2); }
+  .foot { display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: 32px; }
+  .foot h4 { margin: 0 0 12px; font-size: 13px; color: var(--a-text); }
+  .foot a { display: block; color: var(--a-text-2); text-decoration: none; padding: 4px 0; }
+  .foot a:hover { color: var(--a-text-brand); }
+  .foot a.a-logo { display: inline-flex; color: var(--a-text-ink); }
+  .foot__base { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--a-border); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-size: 12.5px; color: var(--a-text-3); }
+  @media (max-width: 760px) { .foot { grid-template-columns: 1fr 1fr; } .foot > :first-child { grid-column: 1 / -1; } }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<header class="nav" id="nav">
+  <div class="a-container nav__in">
+    <a class="a-logo" href="#top" aria-label="Aureum home"><span data-logo style="color:#fff"></span>Aureum</a>
+    <nav class="nav__links" aria-label="Primary">
+      <a href="#moves">Coach</a><a href="#features">Features</a><a href="#legible">Insights</a><a href="#simulate">Goals</a><a href="#security">Security</a>
+    </nav>
+    <div class="nav__right">
+      <button class="icon-btn" id="themeBtn" type="button" aria-label="Toggle dark mode"><span data-icon="moon"></span></button>
+      <a class="nav__signin" href="app/index.html">Sign in</a>
+      <a class="a-btn a-btn--light cta-light" href="app/index.html#/welcome">Get the app</a>
+      <a class="a-btn cta-solid" href="app/index.html#/welcome">Get the app</a>
+      <button class="icon-btn nav__menu" id="menuBtn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="drawer"><span data-icon="menu"></span></button>
+    </div>
+  </div>
+</header>
+<div class="drawer" id="drawer" aria-hidden="true">
+  <div style="display:flex;justify-content:space-between;align-items:center;height:52px;margin-bottom:12px">
+    <a class="a-logo" href="#top"><span data-logo style="color:var(--teal-600)"></span>Aureum</a>
+    <button class="a-btn a-btn--secondary a-btn--icon" id="closeBtn" type="button" aria-label="Close menu"><span data-icon="x"></span></button>
+  </div>
+  <a class="link" href="#moves">Coach</a><a class="link" href="#features">Features</a><a class="link" href="#legible">Insights</a><a class="link" href="#simulate">Goals</a><a class="link" href="#security">Security</a>
+  <a class="a-btn a-btn--lg" href="app/index.html#/welcome" style="margin-top:24px">Get the app</a>
+  <a class="a-btn a-btn--secondary a-btn--lg" href="app/index.html">Sign in</a>
+</div>
+
+<main id="top">
+  <!-- HERO -->
+  <section class="hero">
+    <div class="a-container hero__grid">
+      <div class="hero__copy">
+        <span class="pill"><b>NEW</b>Your AI finance coach, now on iOS, Android &amp; web</span>
+        <h1 class="a-display" aria-label="Money, mentored."><span class="word" style="--i:0">Money,</span> <em class="word" style="--i:1">mentored.</em></h1>
+        <p class="a-lead">Aureum connects your accounts, builds a plan around your goals, and gives you a heads-up <i>before</i> small problems become big ones. It's guidance that fits your life, not generic advice.</p>
+        <div class="hero__ctas">
+          <a class="a-btn a-btn--light a-btn--lg" href="app/index.html#/welcome">Start free <span data-icon="arrowRight"></span></a>
+          <a class="a-btn a-btn--outline-light a-btn--lg" href="#moves"><span data-icon="play"></span>See the coach</a>
+        </div>
+        <div class="hero__trust"><span><span data-icon="lock"></span>Read-only connections</span><span><span data-icon="shield"></span>Bank-level encryption</span><span><span data-icon="heart"></span>No ads, ever</span></div>
+      </div>
+
+      <div class="stage" aria-label="Aureum app preview">
+        <div class="phone">
+          <div class="phone__screen">
+            <div class="phone__notch"></div>
+            <div class="phone__top"><span data-icon="search" style="color:var(--a-text-brand)"></span><span data-logo style="width:26px;color:var(--teal-600)"></span></div>
+            <h3>Good morning, Emily.</h3>
+            <div class="mini">
+              <div class="lbl">Total balance</div>
+              <div class="a-figure" id="heroBal">$0</div>
+              <div class="a-row" style="gap:8px"><span class="a-chip a-chip--good" style="height:24px"><span data-icon="check"></span>On track</span><span class="a-delta a-delta--up" style="font-size:12px">+$6,408 this month</span></div>
+              <div id="heroSpark"></div>
+            </div>
+            <div class="goals">
+              <div class="mini"><div id="hr1"></div>Down payment</div>
+              <div class="mini"><div id="hr2"></div>Emergency fund</div>
+            </div>
+            <nav class="a-tabbar" aria-label="App preview tabs"><a aria-current="page"><span data-icon="bank"></span>Home</a><a><span data-icon="pie"></span>Budget</a><a><span data-icon="target"></span>Goals</a><a><span data-icon="bulb"></span>Insights</a></nav>
+          </div>
+        </div>
+        <div class="float float--nudge">
+          <div class="a-nudge a-nudge--warn">
+            <div class="a-nudge__avatar" data-illo="mascot" aria-label="Sprout"></div>
+            <div><div class="a-nudge__kicker"><span data-icon="sparkle" data-size="14"></span>Heads up · in 12 days</div><div class="a-nudge__title">Rent and car insurance land the same week.</div><p class="a-nudge__body">Move $600 to stay above your cushion.</p></div>
+            <div class="a-nudge__actions"><button class="a-btn a-btn--sm" type="button">Move $600</button></div>
+          </div>
+        </div>
+        <div class="float float--chip"><div class="card"><span class="ico" data-icon="trendUp"></span><div><b>Halfway there</b><span>Down payment · 57%</span></div></div></div>
+        <div class="float float--sprout" data-illo="mascot" data-wave aria-label="Sprout, the Aureum coach, waving"></div>
+        <div class="float float--coin" style="right:8%;bottom:30%;animation-delay:.4s">$</div>
+        <div class="float float--coin" style="left:16%;top:40px;width:26px;height:26px;font-size:12px;animation-delay:1.2s">$</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee" aria-hidden="true"><div class="marquee__track" id="marquee"></div></div>
+
+  <!-- TWO OPENING MOVES -->
+  <section class="sec" id="moves">
+    <div class="a-container moves">
+      <div>
+        <p class="a-eyebrow">A coach that meets you where you are</p>
+        <h2 class="a-h2" style="margin:12px 0 16px">One app. <em>Two ways</em> to open it.</h2>
+        <p class="a-lead">In research, some people wanted to see risk first: what's about to go wrong. Others wanted their standing first: how am I doing? Aureum opens with the one that matters to you.</p>
+        <div class="moves__tabs" role="tablist" aria-label="Choose a home view">
+          <button class="move-tab" role="tab" aria-selected="true" aria-controls="mv-ahead" id="tab-ahead"><span class="av" style="background:#ffe9b8"><span data-illo="insight" aria-hidden="true"></span></span><span><b>Look ahead</b><span>A 30-day forecast that flags trouble before it lands.</span></span></button>
+          <button class="move-tab" role="tab" aria-selected="false" aria-controls="mv-stand" id="tab-stand"><span class="av" style="background:var(--mint-200)"><span data-illo="growth" aria-hidden="true"></span></span><span><b>Know where you stand</b><span>Your health score, net worth and mix, at a glance.</span></span></button>
+        </div>
+        <blockquote class="quote-mini">“I don't need another chart of what I spent. I need to know what's about to go wrong.”<cite>Lisa R., retired nurse · research participant</cite></blockquote>
+      </div>
+      <div class="moves__panel">
+        <div class="move-view is-on" id="mv-ahead" role="tabpanel" aria-labelledby="tab-ahead">
+          <div class="a-card__head"><div><p class="a-card__title">Checking · next 30 days</p><p class="a-card__sub">Projected from bills, paychecks and your spending rhythm</p></div><span class="a-chip a-chip--warn"><span data-icon="alert"></span>Dip on Oct 20</span></div>
+          <div id="c-ahead"></div>
+          <div class="a-nudge a-nudge--warn">
+            <div class="a-nudge__avatar" data-illo="mascot" aria-label="Sprout"></div>
+            <div><div class="a-nudge__kicker"><span data-icon="sparkle" data-size="14"></span>Suggested fix</div><div class="a-nudge__title">Move $600 from savings by Oct 14.</div><p class="a-nudge__body">You'll stay above your $1,000 cushion, and your paycheck on the 21st refills it.</p></div>
+            <div class="a-nudge__actions"><button class="a-btn a-btn--sm" type="button">Schedule transfer</button><button class="a-btn a-btn--ghost a-btn--sm" type="button">Not now</button></div>
+          </div>
+        </div>
+        <div class="move-view" id="mv-stand" role="tabpanel" aria-labelledby="tab-stand">
+          <div class="a-card__head"><div><p class="a-card__title">Your financial health</p><p class="a-card__sub">Updated this morning · 4 accounts</p></div><span class="a-chip a-chip--good"><span data-icon="check"></span>On track</span></div>
+          <div class="stand-grid">
+            <div id="c-gauge"></div>
+            <div class="stand-stats">
+              <div class="a-card"><div class="a-stat"><span class="a-stat__label">Net worth</span><div class="a-stat__row"><span class="a-figure a-figure--md">$168,508</span><span class="a-delta a-delta--up"><span data-icon="arrowUp" data-size="14"></span>28% this year</span></div><div class="a-stat__spark" id="sp-nw"></div></div></div>
+              <div class="a-card"><div class="a-stat"><span class="a-stat__label">Emergency fund</span><div class="a-stat__row"><span class="a-figure a-figure--md">2.4 mo</span><span class="a-small">of expenses · goal 3</span></div><div class="a-progress"><span style="--value:80%"></span></div></div></div>
+            </div>
+          </div>
+          <div style="margin-top:20px"><p class="a-card__title" style="margin-bottom:10px">Investment mix</p><div id="c-mix"></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES BENTO -->
+  <section class="sec" id="features" style="padding-top:0">
+    <div class="a-container">
+      <div class="sec-head">
+        <p class="a-eyebrow">Everything in one calm place</p>
+        <h2 class="a-h2">Plan, track, save and grow, <em>without the spreadsheet.</em></h2>
+        <p class="a-lead">Six tools that usually live in six apps, sharing one picture of your money and one coach who knows your goals.</p>
+      </div>
+      <div class="bento">
+        <article class="b-plan" data-reveal>
+          <span class="a-eyebrow"><span data-icon="pie"></span>Budgeting</span>
+          <h3>A budget that adjusts as your month does.</h3>
+          <p>AI-built from your real spending. When one category runs hot, Aureum suggests where to borrow from, so you never have to start over.</p>
+          <div id="homeBudget"></div>
+        </article>
+        <article class="b-track" data-reveal style="--delay:80ms">
+          <span class="a-eyebrow"><span data-icon="cart"></span>Expense tracking</span>
+          <h3>Every transaction, sorted for you.</h3>
+          <p>Automatic categories with one-tap fixes. See where it went without lifting a finger.</p>
+          <div class="row"><div id="homeDonut"></div>
+            <div class="txns">
+              <div class="a-txn"><span class="a-txn__icon" data-icon="cart"></span><div><div class="a-txn__name">Whole Foods</div><div class="a-txn__meta">Groceries · auto</div></div><span class="a-txn__amt">−$86.40</span></div>
+              <div class="a-txn"><span class="a-txn__icon" data-icon="car"></span><div><div class="a-txn__name">Shell</div><div class="a-txn__meta">Transport · auto</div></div><span class="a-txn__amt">−$48.10</span></div>
+              <div class="a-txn"><span class="a-txn__icon" data-icon="briefcase"></span><div><div class="a-txn__name">Payroll</div><div class="a-txn__meta">Income</div></div><span class="a-txn__amt is-in">+$3,210</span></div>
+            </div>
+          </div>
+        </article>
+        <article class="b-save" data-reveal style="--delay:160ms">
+          <span class="a-eyebrow"><span data-icon="piggy"></span>Savings &amp; investing</span>
+          <h3>Goals that fund themselves.</h3>
+          <p>Automated transfers on payday, round-ups, and a portfolio view that explains itself.</p>
+          <div class="ring-row"><div id="homeRing"></div><div><b style="font-size:14px">Down payment</b><div style="font-size:13px;opacity:.75">$34,100 of $60,000 · +$1,850/mo</div></div></div>
+          <div class="illo" data-illo="piggy" aria-label="Piggy bank"></div>
+        </article>
+        <article class="b-debt" data-reveal>
+          <span class="a-eyebrow"><span data-icon="card"></span>Debt</span>
+          <h3>A payoff plan you'll actually finish.</h3>
+          <div class="bar"><div class="a-progress a-progress--lg"><span style="--value:68%"></span></div><small><span>$18,400 paid</span><span>Free by Mar ’28</span></small></div>
+          <div class="illo" data-illo="payoff" aria-label="Debt payoff staircase" style="width:120px"></div>
+        </article>
+        <article class="b-learn" data-reveal style="--delay:80ms">
+          <span class="a-eyebrow"><span data-icon="grad"></span>Learn</span>
+          <h3>Three-minute lessons, matched to you.</h3>
+          <p>Quizzes and tutorials at your level, from first budget to rebalancing.</p>
+          <div class="illo" data-illo="learn" aria-label="Book and graduation cap" style="width:120px"></div>
+        </article>
+        <article class="b-comm" data-reveal style="--delay:160ms">
+          <span class="a-eyebrow"><span data-icon="users"></span>Community</span>
+          <h3>Money is less stressful together.</h3>
+          <p>Peer groups, live webinars and mentors, because financial stress shouldn't be lonely.</p>
+          <div class="a-avatar-group" role="img" aria-label="Community members"><span class="a-avatar portrait" data-person="0"></span><span class="a-avatar portrait" data-person="3"></span><span class="a-avatar portrait" data-person="5"></span><span class="a-avatar portrait" data-person="2"></span><span class="a-avatar" style="background:var(--indigo-800)">+2k</span></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- LEGIBLE (DATA) -->
+  <section class="sec legible" id="legible">
+    <div class="a-container">
+      <div class="sec-head">
+        <p class="a-eyebrow">Insights</p>
+        <h2 class="a-h2">Your money, <em>finally legible.</em></h2>
+        <p class="a-lead">Clear charts that answer one question: am I okay? Hover anything. Every chart also reads aloud and works from the keyboard.</p>
+      </div>
+      <div class="dash" id="dash">
+        <div class="dash__filters">
+          <div class="a-seg" role="group" aria-label="Time range"><button type="button" aria-pressed="false" data-range="3">3M</button><button type="button" aria-pressed="false" data-range="6">6M</button><button type="button" aria-pressed="true" data-range="12">12M</button></div>
+          <span class="lbl" id="rangeLbl">Nov 2025 – Oct 2026 · Emily J.</span>
+        </div>
+        <div class="dash__grid refetch">
+          <div class="a-card tile"><div class="a-stat"><span class="a-stat__label">Money in</span><span class="a-figure a-figure--md" id="kIn">$0</span><span class="a-small" id="kInSub"></span></div></div>
+          <div class="a-card tile"><div class="a-stat"><span class="a-stat__label">Money out</span><span class="a-figure a-figure--md" id="kOut">$0</span><span class="a-small" id="kOutSub"></span></div></div>
+          <div class="a-card tile"><div class="a-stat"><span class="a-stat__label">Saved</span><span class="a-figure a-figure--md" id="kNet">$0</span><span class="a-delta a-delta--up" id="kNetSub"></span></div></div>
+          <div class="a-card tile"><div class="a-stat"><span class="a-stat__label">Savings rate</span><span class="a-figure a-figure--md" id="kRate">0%</span><div class="a-progress" style="margin-top:6px"><span id="kRateBar" style="--value:0%"></span></div></div></div>
+          <div class="a-card wide"><div class="a-card__head"><div><p class="a-card__title">Cash flow</p><p class="a-card__sub">Money in vs. money out, with net savings</p></div></div><div id="dashCash"></div></div>
+          <div class="a-card side"><div class="a-card__head"><div><p class="a-card__title">Net worth</p><p class="a-card__sub">All accounts</p></div></div><div id="dashNw"></div></div>
+          <div class="a-card full"><div class="a-card__head"><div><p class="a-card__title">Spending rhythm</p><p class="a-card__sub">Daily spending, last 18 weeks. Weekends run warm.</p></div></div><div id="dashHeat" style="overflow-x:auto"></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="sec" id="how">
+    <div class="a-container">
+      <div class="sec-head sec-head--center">
+        <p class="a-eyebrow">How it works</p>
+        <h2 class="a-h2">Useful in the <em>first five minutes.</em></h2>
+        <p class="a-lead">Most finance apps lose people at setup. Aureum gives you value before it asks for commitment.</p>
+      </div>
+      <div class="how">
+        <div class="how__step" data-reveal><span class="num">1</span><div class="art"><div data-illo="connect" aria-label="Phone connecting to bank, card and wallet"></div></div><h3>Connect</h3><p>Link accounts securely with read-only access, or start with a few quick questions. Either way, you're set up in minutes.</p></div>
+        <div class="how__step" data-reveal style="--delay:120ms"><span class="num">2</span><div class="art"><div data-illo="wizard" aria-label="Sprout the coach in a wizard hat"></div></div><h3>Plan</h3><p>The setup wizard ranks your goals, drafts a budget from your real spending, and explains every number.</p></div>
+        <div class="how__step" data-reveal style="--delay:240ms"><span class="num">3</span><div class="art"><div data-illo="insight" aria-label="Lightbulb with coins"></div></div><h3>Get nudged</h3><p>Timely, specific suggestions at the moments that matter. Choose how often and how encouraging they are.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SIMULATOR -->
+  <section class="sec" id="simulate" style="padding-top:0">
+    <div class="a-container">
+      <div class="sec-head">
+        <p class="a-eyebrow">Goal simulator</p>
+        <h2 class="a-h2">How soon could you <em>get there?</em></h2>
+        <p class="a-lead">Drag the sliders. Aureum projects your path with a range, not a promise.</p>
+      </div>
+      <div class="sim">
+        <div class="sim__controls">
+          <div class="a-field"><label class="a-label" for="simGoal">Goal</label><select class="a-select" id="simGoal"><option value="60000" data-start="34100">Home down payment · $60,000</option><option value="18000" data-start="12400">Emergency fund · $18,000</option><option value="12000" data-start="2500">Dream trip · $12,000</option></select></div>
+          <div><div class="sim__val"><label class="a-label" for="simMonthly">Monthly contribution</label><output id="simMonthlyOut" for="simMonthly">$1,850</output></div><input class="a-range" id="simMonthly" type="range" min="100" max="4000" step="50" value="1850"></div>
+          <div><div class="sim__val"><label class="a-label" for="simRate">Savings yield (APY)</label><output id="simRateOut" for="simRate">4.0%</output></div><input class="a-range" id="simRate" type="range" min="0" max="8" step=".5" value="4"></div>
+          <div class="sim__out" aria-live="polite"><div><div class="a-small">You'd reach it by</div><div class="a-figure" id="simDate">Dec 2027</div><div class="a-small" id="simSub" style="margin-top:6px">14 months · $0 in interest</div></div><div data-illo="target" aria-hidden="true"></div></div>
+        </div>
+        <div><div id="simChart"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PERSONAS -->
+  <section class="sec" style="padding-top:0">
+    <div class="a-container">
+      <div class="sec-head">
+        <p class="a-eyebrow">Built for every chapter</p>
+        <h2 class="a-h2">Five lives. <em>Five different plans.</em></h2>
+        <p class="a-lead">Designed with five people across income levels, life stages and financial confidence.</p>
+      </div>
+      <div class="people" id="people"></div>
+    </div>
+  </section>
+
+  <!-- QUOTE -->
+  <section class="sec quote">
+    <div class="deco" data-illo="growth" aria-hidden="true" style="left:4%;top:12%;opacity:.9"></div>
+    <div class="deco" data-illo="piggy" aria-hidden="true" style="right:4%;bottom:10%;opacity:.9"></div>
+    <div class="a-container" data-reveal>
+      <blockquote>Celebrate progress. Never shame the gap.</blockquote>
+      <cite>Aureum design principle · <span>every chart, nudge and illustration follows it</span></cite>
+    </div>
+  </section>
+
+  <!-- SECURITY -->
+  <section class="sec" id="security">
+    <div class="a-container secure">
+      <div class="secure__art" data-reveal><div data-illo="shield" aria-label="Shield with lock"></div></div>
+      <div>
+        <p class="a-eyebrow">Privacy &amp; security</p>
+        <h2 class="a-h2" style="margin:12px 0 16px">Your data works for you, <em>and only you.</em></h2>
+        <p class="a-lead">Privacy worries were the biggest point of friction we found in research. So we made the answer simple.</p>
+        <div class="secure__list">
+          <div class="secure__item" data-reveal><span class="ic" data-icon="lock"></span><div><b>Read-only by design</b><span>Aureum can see balances and transactions. It can never move money without your tap.</span></div></div>
+          <div class="secure__item" data-reveal style="--delay:80ms"><span class="ic" data-icon="shield"></span><div><b>Encrypted end to end</b><span>256-bit encryption at rest and in transit, with biometric unlock on every device.</span></div></div>
+          <div class="secure__item" data-reveal style="--delay:160ms"><span class="ic" data-icon="heart"></span><div><b>We don't sell your data</b><span>No ads and no data brokers. You can export or delete everything, any time.</span></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="sec cta" id="get">
+    <div class="a-container cta__in">
+      <div>
+        <h2 class="a-h1">Grow with <em>guidance.</em></h2>
+        <p class="a-lead">Free to start. Your first plan is ready in under five minutes.</p>
+        <div class="a-row" style="margin-top:28px;gap:12px">
+          <a class="store" href="#get"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.4 12.6c0-2.4 2-3.6 2.1-3.7-1.1-1.7-2.9-1.9-3.5-1.9-1.5-.2-2.9.9-3.7.9-.8 0-1.9-.9-3.2-.8-1.6 0-3.1 1-4 2.4-1.7 3-.4 7.3 1.2 9.7.8 1.2 1.8 2.5 3 2.4 1.2 0 1.7-.8 3.1-.8 1.5 0 1.9.8 3.2.8 1.3 0 2.1-1.2 2.9-2.4.9-1.4 1.3-2.7 1.3-2.8-.1 0-2.4-.9-2.4-3.8zM14 5.4c.7-.8 1.1-1.9 1-3-1 0-2.1.7-2.8 1.5-.6.7-1.2 1.8-1 2.9 1 .1 2.1-.6 2.8-1.4z"/></svg><span><small>Download on the</small>App Store</span></a>
+          <a class="store" href="#get"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 2.8v18.4c0 .5.5.8.9.6l10.4-9.2L4.9 2.2c-.4-.2-.9.1-.9.6zm12.6 8.6L6.7 2.6l11.6 6.6-1.7 2.2zm0 1.2l1.7 2.2-11.6 6.6 9.9-8.8zm3.9-1.4l-2.5-1.4-1.9 2.2 1.9 2.2 2.5-1.4c.8-.5.8-1.2 0-1.6z"/></svg><span><small>Get it on</small>Google Play</span></a>
+          <a class="a-btn a-btn--outline-light a-btn--lg" href="app/index.html">Use on the web</a>
+        </div>
+      </div>
+      <div data-illo="mascot" data-wave aria-label="Sprout waving goodbye"></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="a-container">
+    <div class="foot">
+      <div><a class="a-logo" href="#top" style="padding:0"><span data-logo style="color:var(--teal-600)"></span>Aureum</a><p style="max-width:32ch;margin-top:12px">A holistic, AI-powered personal finance coach for budgeting, goals and insights.</p></div>
+      <div><h4>Product</h4><a href="app/index.html">Open the web app</a><a href="#moves">AI coach</a><a href="#features">Budgeting</a><a href="#simulate">Goals</a><a href="#legible">Insights</a></div>
+      <div><h4>Company</h4><a href="#security">Security</a><a href="#top">About</a><a href="#top">Careers</a><a href="#top">Press</a></div>
+      <div><h4>Resources</h4><a href="design-system.html">Design system</a><a href="#top">Learn</a><a href="#top">Community</a><a href="#top">Help center</a></div>
+    </div>
+    <div class="foot__base"><span>© 2026 Aureum Finance · Concept project by Jon Langer</span><span>Aureum is a financial coach, not a licensed financial advisor. Demo data shown.</span></div>
+  </div>
+</footer>
+
+<script src="assets/art.js"></script>
+<script src="assets/charts.js"></script>
+<script src="assets/data.js"></script>
+<script>
+(function () {
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const D = AureumData, V = AureumViz, F = V.fmt;
+  const root = document.documentElement;
+
+  /* ---------- theme ---------- */
+  const sysDark = matchMedia("(prefers-color-scheme: dark)");
+  try { const t = localStorage.getItem("aureum-theme"); if (t) root.dataset.theme = t; } catch (e) {}
+  const isDark = () => root.dataset.theme ? root.dataset.theme === "dark" : sysDark.matches;
+  const themeBtn = $("#themeBtn");
+  const syncTheme = () => { themeBtn.innerHTML = AureumArt.icon(isDark() ? "sun" : "moon", 18); themeBtn.setAttribute("aria-label", isDark() ? "Switch to light mode" : "Switch to dark mode"); };
+  themeBtn.addEventListener("click", () => { root.dataset.theme = isDark() ? "light" : "dark"; try { localStorage.setItem("aureum-theme", root.dataset.theme); } catch (e) {} syncTheme(); });
+  sysDark.addEventListener("change", syncTheme);
+  syncTheme();
+
+  /* ---------- nav ---------- */
+  const nav = $("#nav");
+  const onScroll = () => nav.classList.toggle("is-solid", scrollY > 40);
+  addEventListener("scroll", onScroll, { passive: true }); onScroll();
+  const drawer = $("#drawer"), menuBtn = $("#menuBtn");
+  const setDrawer = (open) => { drawer.classList.toggle("is-open", open); drawer.setAttribute("aria-hidden", !open); menuBtn.setAttribute("aria-expanded", open); document.body.style.overflow = open ? "hidden" : ""; if (open) $("#closeBtn").focus(); };
+  menuBtn.addEventListener("click", () => setDrawer(true));
+  $("#closeBtn").addEventListener("click", () => setDrawer(false));
+  $$("#drawer a").forEach((a) => a.addEventListener("click", () => setDrawer(false)));
+  addEventListener("keydown", (e) => { if (e.key === "Escape") setDrawer(false); });
+
+  /* ---------- reveal on scroll ---------- */
+  const rio = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("is-in"); rio.unobserve(e.target); } }), { threshold: .15 });
+  $$("[data-reveal]").forEach((el) => rio.observe(el));
+
+  /* ---------- hero ---------- */
+  setTimeout(() => V.countUp($("#heroBal"), 168508.51, { duration: 1800, format: (n) => F.money(n) }), 600);
+  V.spark($("#heroSpark"), { values: D.netWorth, color: "var(--viz-1)" });
+  V.ring($("#hr1"), { value: .57, size: 64, label: "Down payment" });
+  V.ring($("#hr2"), { value: .69, size: 64, color: "var(--viz-2)", label: "Emergency fund" });
+
+  /* ---------- marquee ---------- */
+  const mq = [["pie", "Smart budgets"], ["target", "Goals that fund themselves"], ["bulb", "Proactive insights"], ["card", "Debt payoff plans"], ["trendUp", "Investment tracking"], ["calendar", "Bill reminders"], ["grad", "Bite-size lessons"], ["users", "Peer community"]];
+  const mqHtml = mq.map(([i, t]) => `<span class="marquee__item">${AureumArt.icon(i, 22)}${t}</span>`).join("");
+  $("#marquee").innerHTML = mqHtml + mqHtml;
+
+  /* ---------- two moves ---------- */
+  V.line($("#c-ahead"), { label: "Projected checking balance, next 30 days", labels: D.days, series: [{ name: "Checking", values: D.checking, color: "var(--viz-2)" }], area: true, height: 220, yMin: 0, refLine: { value: 1000, label: "Your $1,000 cushion" }, markers: [{ i: 19, label: "Oct 20 · $480" }] });
+  let standDrawn = false;
+  const drawStand = () => {
+    if (standDrawn) return; standDrawn = true;
+    V.gauge($("#c-gauge"), { value: 87, grade: "B+", label: "Financial health", size: 210 });
+    V.spark($("#sp-nw"), { values: D.netWorth, color: "var(--viz-1)" });
+    V.stack($("#c-mix"), { height: 14, items: [{ label: "US stocks", value: 72400 }, { label: "Int'l stocks", value: 31800 }, { label: "Bonds", value: 24100 }, { label: "Cash", value: 12600 }] });
+  };
+  const tabs = $$(".move-tab");
+  const selectTab = (t) => {
+    tabs.forEach((b) => { const on = b === t; b.setAttribute("aria-selected", on); b.tabIndex = on ? 0 : -1; $("#" + b.getAttribute("aria-controls")).classList.toggle("is-on", on); });
+    if (t.id === "tab-stand") requestAnimationFrame(drawStand);
+  };
+  tabs.forEach((t, i) => {
+    t.addEventListener("click", () => selectTab(t));
+    t.addEventListener("keydown", (e) => { if (e.key === "ArrowDown" || e.key === "ArrowRight") { e.preventDefault(); tabs[(i + 1) % tabs.length].focus(); selectTab(tabs[(i + 1) % tabs.length]); } if (e.key === "ArrowUp" || e.key === "ArrowLeft") { e.preventDefault(); tabs[(i + tabs.length - 1) % tabs.length].focus(); selectTab(tabs[(i + tabs.length - 1) % tabs.length]); } });
+  });
+  tabs[1].tabIndex = -1;
+
+  /* ---------- bento ---------- */
+  V.budget($("#homeBudget"), { items: D.budgets.slice(0, 4) });
+  V.donut($("#homeDonut"), { label: "October spending", items: D.categories.map((c, i) => ({ ...c, color: c.label === "Other" ? "var(--viz-muted)" : `var(--viz-${i + 1})` })), centerLabel: "October", size: 170, thickness: 20 });
+  V.ring($("#homeRing"), { value: .57, size: 84, color: "var(--teal-700)", label: "Down payment" });
+
+  /* ---------- dashboard (one filter row scopes everything) ---------- */
+  const dash = $("#dash");
+  function renderDash(n) {
+    const sl = (a) => a.slice(-n);
+    const inc = sl(D.income), sp = sl(D.spend), months = sl(D.months);
+    const tIn = inc.reduce((a, b) => a + b, 0), tOut = sp.reduce((a, b) => a + b, 0), net = tIn - tOut;
+    V.countUp($("#kIn"), tIn, { format: (v) => F.money(v), duration: 700 });
+    V.countUp($("#kOut"), tOut, { format: (v) => F.money(v), duration: 700 });
+    V.countUp($("#kNet"), net, { format: (v) => F.money(v), duration: 700 });
+    V.countUp($("#kRate"), (net / tIn) * 100, { format: (v) => Math.round(v) + "%", duration: 700 });
+    $("#kRateBar").style.setProperty("--value", Math.round((net / tIn) * 100) + "%");
+    $("#kInSub").textContent = `${F.money(Math.round(tIn / n))} / month avg`;
+    $("#kOutSub").textContent = `${F.money(Math.round(tOut / n))} / month avg`;
+    $("#kNetSub").textContent = `▲ ${F.money(Math.round(net / n))} / month`;
+    $("#rangeLbl").textContent = `${months[0]} – ${months[months.length - 1]} ${n === 12 ? "· 12 months" : "· " + n + " months"} · Emily J.`;
+    V.cashflow($("#dashCash"), { label: "Cash flow", categories: months, income: inc, spend: sp, height: 280 });
+    V.line($("#dashNw"), { label: "Net worth", labels: months, series: [{ name: "Net worth", values: sl(D.netWorth) }], area: true, height: 280 });
+  }
+  renderDash(12);
+  V.heatmap($("#dashHeat"), { label: "Daily spending, 18 weeks", values: D.daily, start: new Date(2026, 5, 1) });
+  $$(".dash__filters [data-range]").forEach((b) => b.addEventListener("click", () => {
+    $$(".dash__filters [data-range]").forEach((x) => x.setAttribute("aria-pressed", x === b));
+    dash.classList.add("is-loading");
+    setTimeout(() => { renderDash(+b.dataset.range); dash.classList.remove("is-loading"); }, 260);
+  }));
+
+  /* ---------- simulator ---------- */
+  const simEls = { goal: $("#simGoal"), m: $("#simMonthly"), r: $("#simRate") };
+  const simChart = $("#simChart");
+  const monthsShort = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  function setFill(inp) { inp.style.setProperty("--fill", ((inp.value - inp.min) / (inp.max - inp.min)) * 100 + "%"); }
+  let simTimer;
+  function runSim(first) {
+    const target = +simEls.goal.value, start = +simEls.goal.selectedOptions[0].dataset.start;
+    const m = +simEls.m.value, apy = +simEls.r.value / 100, mr = Math.pow(1 + apy, 1 / 12) - 1;
+    $("#simMonthlyOut").textContent = F.money(m); $("#simRateOut").textContent = (+simEls.r.value).toFixed(1) + "%";
+    setFill(simEls.m); setFill(simEls.r);
+    let bal = start, months = 0, interest = 0;
+    const vals = [start];
+    while (bal < target && months < 120) { const i = bal * mr; interest += i; bal += i + m; months++; vals.push(Math.round(bal)); }
+    const pad = Math.max(2, Math.round(months * .15));
+    for (let k = 0; k < pad && vals.length < 122; k++) { bal += bal * mr + m; vals.push(Math.round(bal)); }
+    const now = new Date(2026, 9, 1);
+    const labels = vals.map((_, i) => { const d = new Date(now); d.setMonth(now.getMonth() + i); return monthsShort[d.getMonth()] + (d.getMonth() === 0 || i === 0 ? " ’" + String(d.getFullYear()).slice(2) : ""); });
+    const end = new Date(now); end.setMonth(now.getMonth() + months);
+    $("#simDate").textContent = months >= 120 ? "10+ years" : `${monthsShort[end.getMonth()]} ${end.getFullYear()}`;
+    $("#simSub").textContent = months >= 120 ? "Try a bigger monthly amount" : `${months} months · ${F.money(Math.round(interest))} earned in interest`;
+    const lo = vals.map((v, i) => Math.round(v - (v - start) * .1 * (i / vals.length) - i * m * .06));
+    const hi = vals.map((v, i) => Math.round(v + i * m * .05));
+    const draw = () => V.line(simChart, { label: "Projected goal balance", labels, series: [{ name: "Projected balance", values: vals }], band: { lo, hi, from: 1, name: "Likely range" }, area: true, height: 340, refLine: { value: target, label: "Goal " + F.compact(target) }, yMin: 0 });
+    clearTimeout(simTimer);
+    if (first === true) return draw();
+    simTimer = setTimeout(() => { simChart.classList.add("viz-static"); draw(); }, 30);
+  }
+  Object.values(simEls).forEach((e) => e.addEventListener("input", () => runSim()));
+  runSim(true);
+
+  /* ---------- personas ---------- */
+  $("#people").innerHTML = D.personas.map((p, i) => `
+    <article class="person" data-reveal style="--delay:${i * 70}ms">
+      <div class="art"><div class="ill" role="img" aria-label="${p.goal} illustration">${AureumArt.illo(p.illo)}</div></div>
+      <div class="body">
+        <div class="who"><span class="a-avatar" style="background:${p.color}">${p.initials}</span><div><b>${p.name}</b><span>${p.role}</span></div></div>
+        <div class="goal"><div class="pr" id="pr${i}"></div><div><b>${p.goal}</b><span>${F.compact(p.saved)} <small style="font-weight:500;color:var(--a-text-3)">of ${F.compact(p.target)}</small></span></div></div>
+      </div>
+    </article>`).join("");
+  D.personas.forEach((p, i) => V.ring($("#pr" + i), { value: p.saved / p.target, size: 64, color: p.color, label: p.goal }));
+  $$("#people [data-reveal]").forEach((el) => rio.observe(el));
+})();
+</script>
+</body>
+</html>
