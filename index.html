@@ -293,10 +293,6 @@
   .cta .a-h1 em { color: var(--mint-300); }
   .cta .a-lead { color: rgba(255,255,255,.85); margin-top: 16px; }
   .cta [data-illo] { width: clamp(180px, 22vw, 280px); }
-  .store { display: inline-flex; align-items: center; gap: 10px; height: 54px; padding: 0 20px; border-radius: 14px; background: #0b1218; color: #fff; text-decoration: none; font-weight: 700; font-size: 15px; transition: transform var(--dur-1); }
-  .store:hover { transform: translateY(-2px); }
-  .store small { display: block; font-size: 10px; font-weight: 500; opacity: .7; line-height: 1; }
-  .store svg { width: 24px; height: 24px; }
   @media (max-width: 760px) { .cta__in { grid-template-columns: 1fr; } .cta [data-illo] { justify-self: center; } }
   footer { background: var(--a-surface); border-top: 1px solid var(--a-border); padding: 56px 0 40px; font-size: 14px; color: var(--a-text-2); }
   .foot { display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: 32px; }
@@ -319,9 +315,9 @@
     </nav>
     <div class="nav__right">
       <button class="icon-btn" id="themeBtn" type="button" aria-label="Toggle dark mode"><span data-icon="moon"></span></button>
-      <a class="nav__signin" href="app/index.html">Sign in</a>
-      <a class="a-btn a-btn--light cta-light" href="app/index.html#/welcome">Get the app</a>
-      <a class="a-btn cta-solid" href="app/index.html#/welcome">Get the app</a>
+      <a class="nav__signin" href="/app/">Sign in</a>
+      <a class="a-btn a-btn--light cta-light" href="/app/#/welcome">Start free</a>
+      <a class="a-btn cta-solid" href="/app/#/welcome">Start free</a>
       <button class="icon-btn nav__menu" id="menuBtn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="drawer"><span data-icon="menu"></span></button>
     </div>
   </div>
@@ -332,8 +328,8 @@
     <button class="a-btn a-btn--secondary a-btn--icon" id="closeBtn" type="button" aria-label="Close menu"><span data-icon="x"></span></button>
   </div>
   <a class="link" href="#moves">Coach</a><a class="link" href="#features">Features</a><a class="link" href="#legible">Insights</a><a class="link" href="#simulate">Goals</a><a class="link" href="#security">Security</a>
-  <a class="a-btn a-btn--lg" href="app/index.html#/welcome" style="margin-top:24px">Get the app</a>
-  <a class="a-btn a-btn--secondary a-btn--lg" href="app/index.html">Sign in</a>
+  <a class="a-btn a-btn--lg" href="/app/#/welcome" style="margin-top:24px">Start free</a>
+  <a class="a-btn a-btn--secondary a-btn--lg" href="/app/">Sign in</a>
 </div>
 
 <main id="top">
@@ -341,11 +337,11 @@
   <section class="hero">
     <div class="a-container hero__grid">
       <div class="hero__copy">
-        <span class="pill"><b>NEW</b>Your AI finance coach, now on iOS, Android &amp; web</span>
+        <span class="pill"><b>NEW</b>Your AI finance coach, now on the web</span>
         <h1 class="a-display" aria-label="Money, mentored."><span class="word" style="--i:0">Money,</span> <em class="word" style="--i:1">mentored.</em></h1>
         <p class="a-lead">Aureum connects your accounts, builds a plan around your goals, and gives you a heads-up <i>before</i> small problems become big ones. It's guidance that fits your life, not generic advice.</p>
         <div class="hero__ctas">
-          <a class="a-btn a-btn--light a-btn--lg" href="app/index.html#/welcome">Start free <span data-icon="arrowRight"></span></a>
+          <a class="a-btn a-btn--light a-btn--lg" href="/app/#/welcome">Start free <span data-icon="arrowRight"></span></a>
           <a class="a-btn a-btn--outline-light a-btn--lg" href="#moves"><span data-icon="play"></span>See the coach</a>
         </div>
         <div class="hero__trust"><span><span data-icon="lock"></span>Read-only connections</span><span><span data-icon="shield"></span>Bank-level encryption</span><span><span data-icon="heart"></span>No ads, ever</span></div>
@@ -590,9 +586,8 @@
         <h2 class="a-h1">Grow with <em>guidance.</em></h2>
         <p class="a-lead">Free to start. Your first plan is ready in under five minutes.</p>
         <div class="a-row" style="margin-top:28px;gap:12px">
-          <a class="store" href="#get"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.4 12.6c0-2.4 2-3.6 2.1-3.7-1.1-1.7-2.9-1.9-3.5-1.9-1.5-.2-2.9.9-3.7.9-.8 0-1.9-.9-3.2-.8-1.6 0-3.1 1-4 2.4-1.7 3-.4 7.3 1.2 9.7.8 1.2 1.8 2.5 3 2.4 1.2 0 1.7-.8 3.1-.8 1.5 0 1.9.8 3.2.8 1.3 0 2.1-1.2 2.9-2.4.9-1.4 1.3-2.7 1.3-2.8-.1 0-2.4-.9-2.4-3.8zM14 5.4c.7-.8 1.1-1.9 1-3-1 0-2.1.7-2.8 1.5-.6.7-1.2 1.8-1 2.9 1 .1 2.1-.6 2.8-1.4z"/></svg><span><small>Download on the</small>App Store</span></a>
-          <a class="store" href="#get"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 2.8v18.4c0 .5.5.8.9.6l10.4-9.2L4.9 2.2c-.4-.2-.9.1-.9.6zm12.6 8.6L6.7 2.6l11.6 6.6-1.7 2.2zm0 1.2l1.7 2.2-11.6 6.6 9.9-8.8zm3.9-1.4l-2.5-1.4-1.9 2.2 1.9 2.2 2.5-1.4c.8-.5.8-1.2 0-1.6z"/></svg><span><small>Get it on</small>Google Play</span></a>
-          <a class="a-btn a-btn--outline-light a-btn--lg" href="app/index.html">Use on the web</a>
+          <a class="a-btn a-btn--light a-btn--lg" href="/app/#/welcome">Start free <span data-icon="arrowRight"></span></a>
+          <a class="a-btn a-btn--outline-light a-btn--lg" href="/app/">Open the web app</a>
         </div>
       </div>
       <div data-illo="mascot" data-wave aria-label="Sprout waving goodbye"></div>
@@ -604,7 +599,7 @@
   <div class="a-container">
     <div class="foot">
       <div><a class="a-logo" href="#top" style="padding:0"><span data-logo style="color:var(--teal-600)"></span>Aureum</a><p style="max-width:32ch;margin-top:12px">A holistic, AI-powered personal finance coach for budgeting, goals and insights.</p></div>
-      <div><h4>Product</h4><a href="app/index.html">Open the web app</a><a href="#moves">AI coach</a><a href="#features">Budgeting</a><a href="#simulate">Goals</a><a href="#legible">Insights</a></div>
+      <div><h4>Product</h4><a href="/app/">Open the web app</a><a href="#moves">AI coach</a><a href="#features">Budgeting</a><a href="#simulate">Goals</a><a href="#legible">Insights</a></div>
       <div><h4>Company</h4><a href="#security">Security</a><a href="#top">About</a><a href="#top">Careers</a><a href="#top">Press</a></div>
       <div><h4>Resources</h4><a href="design-system.html">Design system</a><a href="#top">Learn</a><a href="#top">Community</a><a href="#top">Help center</a></div>
     </div>

@@ -401,8 +401,8 @@ const VIEWS = {
         <button class="a-btn btn-xl btn-block" id="saveSettings">Save changes</button>
         <section class="card"><h2 style="margin-bottom:6px">Account</h2><p class="muted" style="margin:0 0 10px">Signing out keeps your plan saved on this device.</p>
           <div class="menu-list">
-            <a href="../index.html">${ic("home", 22)}<span>Aureum homepage<small>Features, security and more</small></span>${ic("arrowUpRight", 18).replace("<svg", '<svg class="ext"')}</a>
-            <a href="../design-system.html">${ic("sparkle", 22)}<span>Design system</span>${ic("arrowUpRight", 18).replace("<svg", '<svg class="ext"')}</a>
+            <a href="/">${ic("home", 22)}<span>Aureum homepage<small>Features, security and more</small></span>${ic("arrowUpRight", 18).replace("<svg", '<svg class="ext"')}</a>
+            <a href="/design-system.html">${ic("sparkle", 22)}<span>Design system</span>${ic("arrowUpRight", 18).replace("<svg", '<svg class="ext"')}</a>
           </div>
           <button class="a-btn a-btn--secondary btn-xl btn-block" data-act="signout" style="margin-top:12px">Sign out</button></section>
         <section class="card"><h2 style="margin-bottom:14px">Start over</h2><div class="grid2">
@@ -581,11 +581,11 @@ function accountSheet() {
     <div class="menu-list">
       <a href="#/settings" data-close>${ic("menu", 22)}<span>Settings<small>Profile, accounts, nudges, appearance</small></span></a>
       <a href="#/coach" data-close>${ic("gauge", 22)}<span>Health score<small>${E.healthScore(st).score} · see the breakdown</small></span></a>
-      <a href="../index.html">${ic("home", 22)}<span>Aureum homepage</span>${ic("arrowUpRight", 18).replace("<svg", '<svg class="ext"')}</a>
+      <a href="/">${ic("home", 22)}<span>Aureum homepage</span>${ic("arrowUpRight", 18).replace("<svg", '<svg class="ext"')}</a>
     </div>`,
     foot: `<button class="a-btn a-btn--secondary btn-xl btn-block" data-act="signout">Sign out</button>` });
 }
-function signOut() { Store.signOut(); location.href = "../index.html"; }
+function signOut() { Store.signOut(); location.href = "/"; }
 function renderWelcomeBack(st) {
   $("#ob").innerHTML = `<div class="ob"><div class="ob__body ob__welcome enter" style="justify-content:center">
       <div class="ob__art">${illo("mascot", { wave: true })}</div>
@@ -593,7 +593,7 @@ function renderWelcomeBack(st) {
       <p class="lead">Your Money Map is right where you left it.</p></div>
     <div class="ob__foot">
       <button class="a-btn btn-xl btn-block" id="wbGo">Continue as ${esc(st.profile.name)} ${ic("arrowRight", 22)}</button>
-      <div class="grid2"><a class="a-btn a-btn--secondary btn-lg2" href="../index.html">Back to homepage</a><button class="a-btn a-btn--ghost btn-lg2" id="wbNew">Not you? Start fresh</button></div>
+      <div class="grid2"><a class="a-btn a-btn--secondary btn-lg2" href="/">Back to homepage</a><button class="a-btn a-btn--ghost btn-lg2" id="wbNew">Not you? Start fresh</button></div>
     </div></div>`;
   $("#wbGo").addEventListener("click", () => { location.hash = "#/home"; Store.signIn(); });
   $("#wbNew").addEventListener("click", () => { Store.reset(); location.hash = "#/welcome"; render(); });
